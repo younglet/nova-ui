@@ -12,9 +12,7 @@
 nova({ data: { themeColor: '#3b82f6' } })
 ```
 
-效果：
-
-<nova-color-picker model="themeColor"></nova-color-picker>
+<iframe src="/examples/13-color-picker.html" width="100%" height="380" frameborder="0" style="border-radius:8px"></iframe>
 
 ## 属性
 

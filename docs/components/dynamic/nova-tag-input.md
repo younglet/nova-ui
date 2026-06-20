@@ -12,9 +12,7 @@
 nova({ data: { deviceTags: ['客厅', '主卧'] } })
 ```
 
-效果：
-
-<nova-tag-input model="deviceTags" placeholder="输入后回车"></nova-tag-input>
+<iframe src="/examples/12-tag-input.html" width="100%" height="200" frameborder="0" style="border-radius:8px"></iframe>
 
 ## 属性
 

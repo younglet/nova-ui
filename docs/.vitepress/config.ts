@@ -21,7 +21,16 @@ export default defineConfig({
       { text: '指南', link: '/guide/install', activeMatch: '/guide/' },
       { text: '组件', link: '/components/button', activeMatch: '/components/' },
       { text: '自定义元素', link: '/components/dynamic/index', activeMatch: '/components/dynamic' },
-      { text: '案例', link: '/examples/01-buttons.html', activeMatch: '/examples/' }
+      { text: '案例', link: '/examples/01-buttons.html', activeMatch: '/examples/' },
+      {
+        text: '生态',
+        items: [
+          { text: 'novajs', link: 'http://novajs.local' },
+          { text: 'Nova Style', link: 'http://nova-style.local' },
+          { text: 'Nova UI', link: 'http://nova-ui.local' },
+          { text: 'NovaChart', link: 'http://nova-chart.local' }
+        ]
+      }
     ],
 
     sidebar: {

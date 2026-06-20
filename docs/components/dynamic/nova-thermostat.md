@@ -12,9 +12,7 @@
 nova({ data: { temp: 22, mode: 'cool' } })
 ```
 
-效果：
-
-<nova-thermostat model="temp" mode-model="mode" min="16" max="30" step="0.5" unit="°C"></nova-thermostat>
+<iframe src="/examples/14-thermostat.html" width="100%" height="500" frameborder="0" style="border-radius:8px"></iframe>
 
 ## 属性
 

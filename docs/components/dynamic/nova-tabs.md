@@ -17,14 +17,7 @@
 nova({ data: { active: 'overview' } })
 ```
 
-效果：
-
-<nova-tabs model="active">
-  <button slot="tab" data-tab="overview">概览</button>
-  <button slot="tab" data-tab="sensors">传感器</button>
-  <div slot="panel" data-tab="overview">当前面板：<code>{{ active }}</code></div>
-  <div slot="panel" data-tab="sensors">温度 24.5 °C，湿度 62 %</div>
-</nova-tabs>
+<iframe src="/examples/11-tabs.html" width="100%" height="320" frameborder="0" style="border-radius:8px"></iframe>
 
 ## 属性
 
