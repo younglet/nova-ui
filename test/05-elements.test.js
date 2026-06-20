@@ -141,6 +141,20 @@ describe('nova-slider custom element', function () {
       eq(debouncedCount, 1)
     })
   })
+
+  it('debounce-attached slider also fires change immediately with detail.value', function () {
+    const ctx = setupCe('<nova-slider model="x" debounce="50"></nova-slider>')
+    ctx.nova({ data: { x: 0 } })
+    let changeCount = 0
+    let lastDetail = null
+    const el = ctx.document.querySelector('nova-slider')
+    el.addEventListener('change', function (e) { changeCount++; lastDetail = e.detail })
+    const input = el.querySelector('input')
+    input.value = '33'
+    input.dispatchEvent(new ctx.window.Event('input'))
+    eq(changeCount, 1)
+    eq(lastDetail && lastDetail.value, '33')
+  })
 })
 
 // ============== <nova-input-mask> ==============
@@ -177,6 +191,30 @@ describe('nova-input-mask custom element', function () {
     }).then(function () {
       const input = ctx.document.querySelector('nova-input-mask input')
       eq(input.value, '123')
+    })
+  })
+
+  it('validate attribute renders status indicator and calls nova.http with {value}', function () {
+    const ctx = setupCe('<nova-input-mask model="phone" mask="9999" validate="/api/check?id={value}"></nova-input-mask>')
+    const fetchedUrls = []
+    ctx.nova({
+      data: { phone: '' },
+      funcs: {}
+    })
+    // Inject mock nova.http
+    ctx.nova.http = {
+      get: function (url) { fetchedUrls.push(url); return Promise.resolve({ ok: true, valid: true }) }
+    }
+    const el = ctx.document.querySelector('nova-input-mask')
+    ok(el.querySelector('.nova-input-mask-status'))
+    return ctx.tick().then(function () {
+      const input = el.querySelector('input')
+      input.value = '1234'
+      input.dispatchEvent(new ctx.window.Event('input'))
+      return new Promise(function (r) { setTimeout(r, 20) })
+    }).then(function () {
+      eq(fetchedUrls.length, 1)
+      eq(fetchedUrls[0], '/api/check?id=1234')
     })
   })
 })
@@ -221,6 +259,24 @@ describe('nova-knob custom element', function () {
     return new Promise(function (r) { setTimeout(r, 100) }).then(function () {
       const label = ctx.document.querySelector('nova-knob .knob-label')
       eq(label.textContent, '24.6')
+    })
+  })
+
+  it('formats with format="percent" using nova.fmt', function () {
+    const ctx = setupCe('<nova-knob model="x" format="percent" decimals="1"></nova-knob>')
+    ctx.nova({ data: { x: 0.5 } })
+    return new Promise(function (r) { setTimeout(r, 100) }).then(function () {
+      const label = ctx.document.querySelector('nova-knob .knob-label')
+      eq(label.textContent, '50.0%')
+    })
+  })
+
+  it('formats with format="number" using nova.fmt', function () {
+    const ctx = setupCe('<nova-knob model="x" format="number" decimals="2"></nova-knob>')
+    ctx.nova({ data: { x: 3.14159 } })
+    return new Promise(function (r) { setTimeout(r, 100) }).then(function () {
+      const label = ctx.document.querySelector('nova-knob .knob-label')
+      eq(label.textContent, '3.14')
     })
   })
 })

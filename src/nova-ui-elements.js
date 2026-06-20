@@ -102,17 +102,22 @@
         bindModelToElement(model, this._input)
         var debounceMs = parseInt(this.getAttribute('debounce')) || 0
         if (debounceMs > 0) {
+          // nova.debounce 返回的闭包同时还发布：
+          //   - 'change' (立即) — UI 跟随
+          //   - 'debounced-change' (节流后) — 用于发起 HTTP
+          // 如果 nova.debounce 不可用则降级为仅 'change' 事件
           var emitDebounced = (global.nova && global.nova.debounce) ?
             global.nova.debounce(function () {
-              self.dispatchEvent(new CustomEvent('debounced-change', { bubbles: true }))
+              self.dispatchEvent(new CustomEvent('debounced-change', { bubbles: true, detail: { value: self._input.value } }))
             }, debounceMs) : null
           this._input.addEventListener('input', function () {
             if (emitDebounced) emitDebounced()
+            self.dispatchEvent(new CustomEvent('change', { bubbles: true, detail: { value: self._input.value } }))
           })
         }
       }
       this._input.addEventListener('change', function (event) {
-        self.dispatchEvent(new CustomEvent('change', { bubbles: true, detail: event }))
+        self.dispatchEvent(new CustomEvent('change', { bubbles: true, detail: { value: self._input.value } }))
       })
     }
 
@@ -163,20 +168,52 @@
       var mask = this.getAttribute('mask') || ''
       var placeholder = this.getAttribute('placeholder') || mask
       var disabled = this.hasAttribute('disabled')
+      var validateUrl = this.getAttribute('validate') || ''
       this.className = 'nova-ce nova-ce-input-mask'
       this.innerHTML = '<input type="text" class="nova-input-mask"' +
         ' placeholder="' + placeholder + '"' +
-        (disabled ? ' disabled' : '') + '>'
+        (disabled ? ' disabled' : '') + '>' +
+        '<span class="nova-input-mask-status" aria-hidden="true"></span>'
       this._input = this.querySelector('input')
+      this._status = this.querySelector('.nova-input-mask-status')
       this._mask = mask
       var self = this
+      var lastValidateToken = 0
       this._input.addEventListener('input', function () {
         var masked = applyMask(this.value, mask)
         if (this.value !== masked) this.value = masked
         if (self.getAttribute('model') && typeof global.nova === 'function' && global.nova._data) {
           global.nova._data[self.getAttribute('model')] = masked
         }
+        // 异步校验（可选，依赖 nova.http）
+        if (validateUrl && global.nova && global.nova.http) {
+          var token = ++lastValidateToken
+          var url = validateUrl.replace('{value}', encodeURIComponent(masked))
+          self._setStatus('pending')
+          global.nova.http.get(url).then(function (resp) {
+            if (token !== lastValidateToken) return
+            var ok = !!(resp && (resp.ok === true || resp.valid === true))
+            self._setStatus(ok ? 'ok' : 'err')
+            self.dispatchEvent(new CustomEvent('validate', {
+              bubbles: true,
+              detail: { value: masked, ok: ok, response: resp }
+            }))
+          }).catch(function () {
+            if (token !== lastValidateToken) return
+            self._setStatus('err')
+            self.dispatchEvent(new CustomEvent('validate', {
+              bubbles: true,
+              detail: { value: masked, ok: false }
+            }))
+          })
+        }
       })
+
+      this._setStatus = function (state) {
+        if (!self._status) return
+        self._status.dataset.state = state
+        self._status.textContent = state === 'pending' ? '…' : (state === 'ok' ? '✓' : (state === 'err' ? '✗' : ''))
+      }
 
       var model = this.getAttribute('model')
       if (model) {
@@ -343,8 +380,32 @@
     }
 
     cls.prototype._formatValue = function (v) {
-      var decimals = parseInt(this.getAttribute('decimals')) || 0
-      return decimals > 0 ? Number(v).toFixed(decimals) : Math.round(v)
+      var format = this.getAttribute('format')
+      var decimals = parseInt(this.getAttribute('decimals'))
+      var n = Number(v)
+      if (isNaN(n)) return ''
+      // 优先用 nova.fmt（如果加载了）
+      if (format && global.nova && global.nova.fmt) {
+        var fmtFn = global.nova.fmt[format]
+        if (typeof fmtFn === 'function') {
+          return fmtFn(n, isNaN(decimals) ? undefined : decimals)
+        }
+      }
+      // 降级 / 默认
+      if (format === 'percent') {
+        var d = isNaN(decimals) ? 0 : decimals
+        return (n * 100).toFixed(d) + '%'
+      }
+      if (format === 'number') {
+        var d2 = isNaN(decimals) ? 0 : decimals
+        return n.toFixed(d2)
+      }
+      if (format === 'bytes' && global.nova && global.nova.fmt) {
+        return global.nova.fmt.bytes(n)
+      }
+      // 不带 format：保持老行为（decimals 属性 或 整数）
+      if (!isNaN(decimals) && decimals > 0) return n.toFixed(decimals)
+      return String(Math.round(n))
     }
 
     return cls

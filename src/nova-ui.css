@@ -1056,3 +1056,23 @@
 .dark .device-card { box-shadow: 0 0 0 1px rgba(255,255,255,0.05); }
 .dark .toast,
 .dark .modal { box-shadow: 0 10px 15px -3px rgba(0,0,0,0.5); }
+/* ============== nova-ui-elements 状态指示 ============== */
+.nova-ce { display: inline-block; }
+.nova-ce-input-mask { position: relative; }
+.nova-ce-input-mask input { padding-right: 28px; }
+.nova-input-mask-status {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1;
+  pointer-events: none;
+  width: 16px;
+  text-align: center;
+}
+.nova-input-mask-status[data-state="pending"] { color: #6b7280; }
+.nova-input-mask-status[data-state="ok"]      { color: #10b981; }
+.nova-input-mask-status[data-state="err"]     { color: #ef4444; }
+.nova-input-mask-status:empty { display: none; }
