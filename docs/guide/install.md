@@ -1,5 +1,7 @@
 # 快速开始
 
+<iframe src="/examples/flasher.html" width="100%" height="340" frameborder="0" style="border-radius:8px;margin-bottom:24px"></iframe>
+
 ## 给谁用？
 
 nova-ui 是 **ESP32 + MicroPython server** 部署的 IoT 前端三件套之一：

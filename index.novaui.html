@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>nova-ui on ESP32</title>
+  <link rel="stylesheet" href="nova-style.min.css">
+  <link rel="stylesheet" href="nova-ui.min.css">
+  <script src="novajs.min.js"></script>
+  <script src="nova-ui-elements.min.js"></script>
+</head>
+<body class="bg-gray-50 min-h-screen p-4">
+  <div class="max-w-md mx-auto">
+    <div class="card">
+      <div class="card-body">
+        <h1 class="card-title">智能家居控制</h1>
+        <p class="text-sm text-gray-500 mb-4">9 个 ‹nova-› 自定义元素 + 21 KB 反应式</p>
+
+        <div class="flex items-center gap-3 mb-4">
+          <nova-switch model="power" variant="primary"></nova-switch>
+          <span class="badge" :class="power ? 'badge-success' : 'badge-neutral'">
+            {{ power ? 'ON' : 'OFF' }}
+          </span>
+        </div>
+
+        <div class="mb-4">
+          <label class="text-sm font-medium block mb-1">亮度</label>
+          <nova-slider model="brightness" min="0" max="100" debounce="300" style="width:100%"></nova-slider>
+          <div class="text-xs text-gray-500 mt-1">{{ brightness }}%</div>
+        </div>
+
+        <div class="mb-4">
+          <label class="text-sm font-medium block mb-1">色温</label>
+          <nova-slider model="warmth" min="0" max="100" debounce="300" style="width:100%" value-color="#f59e0b"></nova-slider>
+          <div class="text-xs text-gray-500 mt-1">{{ warmth }}%</div>
+        </div>
+
+        <div class="flex gap-2">
+          <button class="btn btn-primary" @click="save">保存</button>
+          <button class="btn btn-neutral" @click="power=false;brightness=0">重置</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    nova({
+      data: { power: false, brightness: 50, warmth: 30 },
+      funcs: {
+        async save () {
+          await nova.http.post('/api/settings', { power: this.power, brightness: this.brightness, warmth: this.warmth })
+        }
+      }
+    })
+  </script>
+</body>
+</html>
