@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>novajs · 03 实时传感器（nova-ui 版）</title>
+  <link rel="stylesheet" href="../../src/nova-style.css">
+  <link rel="stylesheet" href="../../src/nova-ui.css">
+</head>
+<body class="bg-gray-50 min-h-screen p-4">
+
+  <!-- 顶栏：navbar 组件 -->
+  <div class="navbar navbar-dark mb-4 rounded-lg">
+    <div class="navbar-brand">🌱 大棚传感器</div>
+    <div class="navbar-actions">
+      <span class="text-sm d-flex items-center gap-2">
+        <span class="status-dot"
+              :class="online ? 'status-online status-pulse' : 'status-error'"></span>
+        {{ online ? '在线' : '离线' }}
+      </span>
+      <span class="badge" :class="online ? 'badge-success' : 'badge-error'">
+        自动刷新 · {{ intervalSec }}s
+      </span>
+      <button class="btn btn-sm" @click="poll()">立即刷新</button>
+      <button class="btn btn-sm" @click="paused = !paused"
+              :class="paused ? 'btn-warning' : 'btn-ghost'">
+        {{ paused ? '⏸ 已暂停' : '▶ 运行中' }}
+      </button>
+    </div>
+  </div>
+
+  <!-- 传感器网格：直接用 sensor-card 组件 -->
+  <div class="grid grid-cols-2 gap-3 mb-4">
+
+    <!-- 温度 -->
+    <div class="sensor-card">
+      <div class="flex justify-between items-center">
+        <div class="sensor-label">🌡 空气温度</div>
+        <span class="badge" :class="temp.online ? 'badge-success' : 'badge-error'">
+          {{ temp.online ? '在线' : '离线' }}
+        </span>
+      </div>
+      <div class="sensor-value"
+           :class="temp.value > 30 ? 'text-red-500' : temp.value < 18 ? 'text-blue-500' : ''">
+        {{ temp.value.toFixed(1) }}<span class="sensor-unit">°C</span>
+      </div>
+      <div class="sensor-status"
+           :class="temp.value > 30 ? 'sensor-status-error' : temp.value < 18 ? 'sensor-status-warning' : 'sensor-status-normal'">
+        {{ temp.value > 30 ? '↑ 过高' : temp.value < 18 ? '↓ 偏低' : '→ 正常' }}
+      </div>
+      <div class="progress progress-warning mt-2" style="height: 6px;">
+        <div class="progress-bar" :style="{ width: (temp.value / 50 * 100) + '%' }"></div>
+      </div>
+    </div>
+
+    <!-- 湿度 -->
+    <div class="sensor-card">
+      <div class="flex justify-between items-center">
+        <div class="sensor-label">💧 空气湿度</div>
+        <span class="badge" :class="humid.online ? 'badge-success' : 'badge-error'">
+          {{ humid.online ? '在线' : '离线' }}
+        </span>
+      </div>
+      <div class="sensor-value">{{ humid.value.toFixed(1) }}<span class="sensor-unit">%RH</span></div>
+      <div class="sensor-status sensor-status-normal">→ 适宜</div>
+      <div class="progress progress-primary mt-2" style="height: 6px;">
+        <div class="progress-bar" :style="{ width: humid.value + '%', background: '#06b6d4' }"></div>
+      </div>
+    </div>
+
+    <!-- 光照 -->
+    <div class="sensor-card">
+      <div class="flex justify-between items-center">
+        <div class="sensor-label">☀ 光照</div>
+        <span class="badge" :class="lux.online ? 'badge-success' : 'badge-error'">
+          {{ lux.online ? '在线' : '离线' }}
+        </span>
+      </div>
+      <div class="sensor-value">{{ lux.value }}<span class="sensor-unit">lux</span></div>
+      <div class="sensor-status"
+           :class="lux.value < 200 ? 'sensor-status-warning' : 'sensor-status-normal'">
+        {{ lux.value < 200 ? '↓ 偏暗' : '→ 充足' }}
+      </div>
+      <div class="progress mt-2" style="height: 6px;">
+        <div class="progress-bar" :style="{ width: (lux.value / 1000 * 100) + '%', background: '#facc15' }"></div>
+      </div>
+    </div>
+
+    <!-- 电压 -->
+    <div class="sensor-card">
+      <div class="flex justify-between items-center">
+        <div class="sensor-label">🔋 电压</div>
+        <span class="badge" :class="volt.online ? (volt.value < 3.5 ? 'badge-error' : 'badge-success') : 'badge-error'">
+          {{ volt.online ? (volt.value < 3.5 ? '低电' : '在线') : '离线' }}
+        </span>
+      </div>
+      <div class="sensor-value" :class="volt.value < 3.5 ? 'text-red-500' : ''">
+        {{ volt.value.toFixed(2) }}<span class="sensor-unit">V</span>
+      </div>
+      <div class="sensor-status"
+           :class="volt.value < 3.5 ? 'sensor-status-error' : 'sensor-status-normal'">
+        {{ volt.value < 3.5 ? '⚠ 需充电' : '→ 正常' }}
+      </div>
+      <div class="progress mt-2" style="height: 6px;">
+        <div class="progress-bar"
+             :class="volt.value < 3.5 ? 'progress-error' : 'progress-success'"
+             :style="{ width: (volt.value / 5 * 100) + '%' }"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 底部状态条 -->
+  <div class="card">
+    <div class="card-body py-2 px-3 flex justify-between items-center text-xs">
+      <span class="text-gray-500">
+        <span class="status-dot"
+              :class="online ? 'status-online' : 'status-error'"
+              style="display: inline-block; margin-right: 4px;"></span>
+        上次更新：{{ updatedAt || '--:--:--' }}
+      </span>
+      <span class="text-gray-500">
+        共 {{ onlineCount }} / 4 个传感器在线
+      </span>
+    </div>
+  </div>
+
+  <script src="../../src/novajs.js"></script>
+  <script>
+    // ============ Mock 后端（带随机波动） ============
+    ;(function () {
+      var baseValues = { temp: 24.5, humid: 58.0, lux: 320, volt: 3.85 }
+      nova.http.get = async function (url) {
+        await new Promise(function (r) { setTimeout(r, 100 + Math.random() * 200) })
+        if (url.indexOf('sensors') >= 0) {
+          return {
+            temp:  +(baseValues.temp  + (Math.random() - 0.5) * 1.5).toFixed(2),
+            humid: +(baseValues.humid + (Math.random() - 0.5) * 4  ).toFixed(2),
+            lux:   ~~(baseValues.lux   + (Math.random() - 0.5) * 80 ),
+            volt:  +(baseValues.volt  + (Math.random() - 0.5) * 0.05).toFixed(3)
+          }
+        }
+        return {}
+      }
+    })()
+
+    // ============ 应用 ============
+    const data = nova({
+      data: {
+        intervalSec: 3,
+        paused: false,
+        online: false,
+        updatedAt: '',
+        temp:  { value: 0, online: false },
+        humid: { value: 0, online: false },
+        lux:   { value: 0, online: false },
+        volt:  { value: 0, online: false }
+      },
+      funcs: {
+        get onlineCount () {
+          return [this.temp, this.humid, this.lux, this.volt].filter(function (s) { return s.online }).length
+        },
+        async poll () {
+          if (this.paused) return
+          try {
+            const r = await nova.http.get('/api/sensors')
+            this.temp  = { value: r.temp,  online: true }
+            this.humid = { value: r.humid, online: true }
+            this.lux   = { value: r.lux,   online: true }
+            this.volt  = { value: r.volt,  online: true }
+            this.online = true
+            this.updatedAt = new Date().toLocaleTimeString()
+          } catch (e) {
+            this.temp.online  = false
+            this.humid.online = false
+            this.lux.online   = false
+            this.volt.online  = false
+            this.online = false
+          }
+        }
+      }
+    })
+
+    // 立即拉一次 + 启动轮询
+    data.poll()
+    setInterval(function () { data.poll() }, 3000)
+  </script>
+</body>
+</html>

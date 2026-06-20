@@ -1,0 +1,18 @@
+{
+  "name": "nova-ui-docs",
+  "version": "1.0.0",
+  "description": "Nova UI documentation site",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "csso src/nova-ui.css -o src/nova-ui.min.css && csso src/nova-style.css -o src/nova-style.min.css && terser src/nova-ui-elements.js -c -m -o src/nova-ui-elements.min.js && terser src/novajs.js -c -m -o src/novajs.min.js",
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:preview": "vitepress preview docs"
+  },
+  "devDependencies": {
+    "csso-cli": "^4.0.2",
+    "terser": "^5.48.0",
+    "vitepress": "^1.0.0"
+  }
+}

@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>Nova UI - 表单、开关、加载</title>
+  <link rel="stylesheet" href="../nova-style.css">
+  <link rel="stylesheet" href="../nova-ui.css">
+</head>
+<body class="bg-gray-50 p-4">
+
+  <h1 class="text-2xl font-bold mb-1">表单 / 开关 / 加载</h1>
+  <p class="text-sm text-gray-500 mb-6">交互类组件</p>
+
+  <div class="grid grid-cols-2 gap-4">
+    <!-- 输入框 -->
+    <div class="card">
+      <div class="card-body">
+        <h3 class="card-title">原生输入框</h3>
+        <p class="text-sm text-gray-500 mb-3">nova-ui 不重写输入框，nova-style 已内置样式。</p>
+        <label>设备名称</label>
+        <input type="text" value="客厅灯" class="mb-3">
+        <label>亮度</label>
+        <input type="range" min="0" max="100" value="75" class="mb-3">
+        <label>备注</label>
+        <textarea rows="2"></textarea>
+      </div>
+    </div>
+
+    <!-- 输入框组合 -->
+    <div class="card">
+      <div class="card-body">
+        <h3 class="card-title">Input Group 输入框组合</h3>
+        <p class="text-sm text-gray-500 mb-3">搜索框、URL 输入框这类组合。</p>
+
+        <div class="input-group mb-3">
+          <span class="input-group-addon">🔍</span>
+          <input type="text" placeholder="搜索设备...">
+          <button class="btn btn-primary">搜索</button>
+        </div>
+
+        <div class="input-group mb-3">
+          <span class="input-group-addon">https://</span>
+          <input type="text" placeholder="example.com">
+        </div>
+
+        <div class="input-group">
+          <input type="text" placeholder="价格">
+          <span class="input-group-addon">元</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Switch -->
+    <div class="card">
+      <div class="card-body">
+        <h3 class="card-title">Switch 开关</h3>
+        <p class="text-sm text-gray-500 mb-3">IoT 设备控制专用。</p>
+
+        <div class="flex flex-col gap-3">
+          <div class="flex items-center justify-between">
+            <span>客厅灯</span>
+            <label class="switch">
+              <input type="checkbox" checked>
+              <span class="switch-slider"></span>
+            </label>
+          </div>
+          <div class="flex items-center justify-between">
+            <span>空调（蓝色）</span>
+            <label class="switch switch-primary">
+              <input type="checkbox" checked>
+              <span class="switch-slider"></span>
+            </label>
+          </div>
+          <div class="flex items-center justify-between">
+            <span>加热器（红色）</span>
+            <label class="switch switch-error">
+              <input type="checkbox">
+              <span class="switch-slider"></span>
+            </label>
+          </div>
+          <div class="flex items-center justify-between">
+            <span>禁用状态</span>
+            <label class="switch">
+              <input type="checkbox" disabled>
+              <span class="switch-slider"></span>
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Loading -->
+    <div class="card">
+      <div class="card-body">
+        <h3 class="card-title">Loading 加载中</h3>
+        <p class="text-sm text-gray-500 mb-3">3 种尺寸 × 4 种颜色。</p>
+
+        <div class="flex gap-4 items-center mb-3">
+          <span class="loading loading-sm loading-primary"></span>
+          <span class="loading loading-primary"></span>
+          <span class="loading loading-lg loading-primary"></span>
+        </div>
+        <div class="flex gap-4 items-center mb-3">
+          <span class="loading loading-primary"></span>
+          <span class="loading loading-success"></span>
+          <span class="loading loading-warning"></span>
+          <span class="loading loading-error"></span>
+        </div>
+        <div class="bg-blue-500 text-white p-3 rounded flex items-center gap-2">
+          <span class="loading loading-white"></span>
+          <span>正在加载数据...</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Avatar -->
+    <div class="card">
+      <div class="card-body">
+        <h3 class="card-title">Avatar 头像</h3>
+        <p class="text-sm text-gray-500 mb-3">3 种尺寸，支持文字或图片。</p>
+        <div class="flex items-center gap-3">
+          <div class="avatar avatar-sm">ZC</div>
+          <div class="avatar">ZC</div>
+          <div class="avatar avatar-lg" style="background-color: var(--blue-500); color: white;">Z</div>
+          <div class="avatar" style="background-color: var(--green-500); color: white;">A</div>
+          <div class="avatar" style="background-color: var(--red-500); color: white;">B</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Breadcrumb + Divider -->
+    <div class="card">
+      <div class="card-body">
+        <h3 class="card-title">Breadcrumb / Divider</h3>
+
+        <div class="breadcrumb mb-4">
+          <span class="breadcrumb-item">首页</span>
+          <span class="breadcrumb-separator">/</span>
+          <span class="breadcrumb-item">设备</span>
+          <span class="breadcrumb-separator">/</span>
+          <span class="breadcrumb-item active">客厅灯</span>
+        </div>
+
+        <hr class="divider">
+
+        <div class="divider-text">
+          <span>或者</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

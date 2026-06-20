@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>Nova UI - 按钮所有变体</title>
+  <link rel="stylesheet" href="../src/nova-style.css">
+  <link rel="stylesheet" href="../src/nova-ui.css">
+</head>
+<body class="bg-gray-50 p-4">
+
+  <h1 class="text-2xl font-bold mb-1">按钮所有变体</h1>
+  <p class="text-sm text-gray-500 mb-6">复制即可用，每个按钮都是一个 .btn + 颜色/尺寸 class 的组合</p>
+
+  <!-- 颜色 -->
+  <section class="bg-white p-4 rounded-lg shadow mb-4">
+    <h2 class="text-lg font-bold mb-3">颜色变体</h2>
+    <div class="flex gap-2 flex-wrap">
+      <button class="btn btn-primary">主操作</button>
+      <button class="btn btn-success">成功</button>
+      <button class="btn btn-error">错误/危险</button>
+      <button class="btn btn-warning">警告</button>
+      <button class="btn btn-neutral">中性</button>
+      <button class="btn btn-ghost">Ghost</button>
+      <button class="btn btn-outline">Outline</button>
+    </div>
+  </section>
+
+  <!-- 尺寸 -->
+  <section class="bg-white p-4 rounded-lg shadow mb-4">
+    <h2 class="text-lg font-bold mb-3">尺寸变体</h2>
+    <div class="flex gap-2 items-center">
+      <button class="btn btn-primary btn-sm">小</button>
+      <button class="btn btn-primary">默认</button>
+      <button class="btn btn-primary btn-lg">大</button>
+    </div>
+  </section>
+
+  <!-- 块级 -->
+  <section class="bg-white p-4 rounded-lg shadow mb-4">
+    <h2 class="text-lg font-bold mb-3">块级按钮</h2>
+    <button class="btn btn-primary btn-block mb-2">占满宽度 1</button>
+    <button class="btn btn-outline btn-block">占满宽度 2</button>
+  </section>
+
+  <!-- 圆形 -->
+  <section class="bg-white p-4 rounded-lg shadow mb-4">
+    <h2 class="text-lg font-bold mb-3">圆形按钮（图标用）</h2>
+    <div class="flex gap-2">
+      <button class="btn btn-primary btn-circle">+</button>
+      <button class="btn btn-error btn-circle">×</button>
+      <button class="btn btn-success btn-circle">✓</button>
+      <button class="btn btn-neutral btn-circle">⚙</button>
+    </div>
+  </section>
+
+  <!-- 禁用 -->
+  <section class="bg-white p-4 rounded-lg shadow mb-4">
+    <h2 class="text-lg font-bold mb-3">禁用状态</h2>
+    <div class="flex gap-2">
+      <button class="btn btn-primary" disabled>禁用主按钮</button>
+      <button class="btn btn-success" disabled>禁用成功</button>
+      <button class="btn btn-outline" disabled>禁用 outline</button>
+    </div>
+  </section>
+
+  <!-- 实际场景 -->
+  <section class="bg-white p-4 rounded-lg shadow mb-4">
+    <h2 class="text-lg font-bold mb-3">实际场景：确认对话框</h2>
+    <div class="flex gap-2 justify-end">
+      <button class="btn btn-ghost">取消</button>
+      <button class="btn btn-outline">稍后</button>
+      <button class="btn btn-error">确认删除</button>
+    </div>
+  </section>
+
+  <!-- 图标 + 文字 -->
+  <section class="bg-white p-4 rounded-lg shadow">
+    <h2 class="text-lg font-bold mb-3">图标 + 文字</h2>
+    <div class="flex gap-2 flex-wrap">
+      <button class="btn btn-primary">💾 保存</button>
+      <button class="btn btn-success">✅ 提交</button>
+      <button class="btn btn-error">🗑 删除</button>
+      <button class="btn btn-warning">⚠️ 警告</button>
+      <button class="btn btn-neutral">🔄 重置</button>
+    </div>
+  </section>
+
+</body>
+</html>

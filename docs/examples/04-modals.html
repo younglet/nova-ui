@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>Nova UI - 弹窗、Toast 通知</title>
+  <link rel="stylesheet" href="../nova-style.css">
+  <link rel="stylesheet" href="../nova-ui.css">
+</head>
+<body class="bg-gray-50 p-4">
+
+  <h1 class="text-2xl font-bold mb-1">弹窗 / Toast 通知</h1>
+  <p class="text-sm text-gray-500 mb-6">需要 JS 配合（点击按钮看效果）</p>
+
+  <!-- 触发按钮 -->
+  <div class="mb-6 flex gap-2 flex-wrap">
+    <button class="btn btn-primary" onclick="openModal('modal-1')">打开确认弹窗</button>
+    <button class="btn btn-error" onclick="openModal('modal-2')">打开危险操作弹窗</button>
+    <button class="btn btn-success" onclick="showToast('保存成功！', 'success')">显示成功 Toast</button>
+    <button class="btn btn-warning" onclick="showToast('网络不稳定', 'warning')">显示警告 Toast</button>
+    <button class="btn btn-error" onclick="showToast('连接失败', 'error')">显示错误 Toast</button>
+    <button class="btn btn-neutral" onclick="showToast('新消息提醒', 'info')">显示信息 Toast</button>
+  </div>
+
+  <!-- Modal 1: 确认 -->
+  <div id="modal-1" class="modal-backdrop" onclick="if(event.target===this) closeModal('modal-1')">
+    <div class="modal">
+      <h3 class="modal-title">确认保存？</h3>
+      <p class="modal-body">
+        您的更改将立即生效。点击"确认"保存更改，点击"取消"返回编辑。
+      </p>
+      <div class="modal-actions">
+        <button class="btn btn-neutral" onclick="closeModal('modal-1')">取消</button>
+        <button class="btn btn-primary" onclick="closeModal('modal-1'); showToast('已保存', 'success')">确认</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 2: 危险操作 -->
+  <div id="modal-2" class="modal-backdrop" onclick="if(event.target===this) closeModal('modal-2')">
+    <div class="modal">
+      <h3 class="modal-title">⚠️ 删除设备？</h3>
+      <p class="modal-body">
+        删除后将无法恢复，所有相关数据将被清除。此操作不可撤销。
+      </p>
+      <div class="modal-actions">
+        <button class="btn btn-ghost" onclick="closeModal('modal-2')">取消</button>
+        <button class="btn btn-error" onclick="closeModal('modal-2'); showToast('设备已删除', 'success')">确认删除</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast 容器 -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <script>
+    function openModal(id) {
+      document.getElementById(id).classList.add('modal-open')
+    }
+    function closeModal(id) {
+      document.getElementById(id).classList.remove('modal-open')
+    }
+    function showToast(msg, type = 'info') {
+      const t = document.createElement('div')
+      t.className = 'toast toast-' + type
+      t.textContent = msg
+      document.getElementById('toast-container').appendChild(t)
+      setTimeout(() => t.remove(), 3000)
+    }
+  </script>
+
+</body>
+</html>

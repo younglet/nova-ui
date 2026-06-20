@@ -1,0 +1,899 @@
+/* ============================================================
+ * Nova Style v2.0 - 极简工具类 CSS
+ * 支持暗色模式 · 约 120 个 class · 约 8KB
+ *
+ * ┌──────────────────────────────────────────────────────────┐
+ * │ 切换暗色模式（三选一）：                                  │
+ * │   <html class="dark">                <!-- 推荐 -->       │
+ * │   <html data-theme="dark">           <!-- 等价写法 -->    │
+ * │                                                          │
+ * │ 自动检测系统偏好（放进 <head>）:                         │
+ * │   <script>                                              │
+ * │     if (matchMedia('(prefers-color-scheme: dark)').matches) {│
+ * │       document.documentElement.classList.add('dark')     │
+ * │     }                                                    │
+ * │   </script>                                              │
+ * └──────────────────────────────────────────────────────────┘
+ *
+ * 本文件目录（按从上到下顺序）：
+ *   1.  颜色 token（CSS 变量）   ← 改这里就改了主题色
+ *   2.  显示 Display
+ *   3.  Flex 方向
+ *   4.  Flex 对齐
+ *   5.  Gap 间距
+ *   6.  Grid 网格
+ *   7.  宽度 Width
+ *   8.  高度 Height
+ *   9.  Padding 内边距
+ *   10. Margin  外边距
+ *   11. 文字大小 Text Size
+ *   12. 字重 Font Weight
+ *   13. 文字对齐 Text Align
+ *   14. 文字颜色 Text Color
+ *   15. 背景颜色 Background Color
+ *   16. 边框 Border
+ *   17. 圆角 Rounded
+ *   18. 阴影 Shadow
+ *   19. 鼠标手势 Cursor
+ *   20. 过渡动画 Transition
+ *   21. Hover 变体
+ *   22. 表单元素内置样式
+ *
+ * 配套文档：docs/utilities/*.md（每个工具类页面都有更多 DOM 实例）
+ * 配套案例：01-08 *.html（综合用法演示）
+ * ============================================================ */
+
+
+/* ============================================================
+ * 1. 颜色 token（CSS 变量）
+ * ============================================================
+ *
+ * Nova Style 共有两类颜色：
+ *
+ *   ① 语义色（用 var(--nova-*) 引用，会随暗色模式切换）
+ *      --nova-bg          页面背景
+ *      --nova-surface     卡片背景（默认白色）
+ *      --nova-surface-2   次级背景（如选中态、输入框）
+ *      --nova-text        主文字
+ *      --nova-text-muted  次要文字
+ *      --nova-border      边框
+ *
+ *   ② 固定色阶（用 var(--gray-*) 等直接引用，不随暗色模式变）
+ *      适用于按钮、状态色——"绿色=正常"在任何主题下都该是绿色。
+ *
+ *      --gray-50/100/200/300/500/700/800/900   9 档灰阶
+ *      --red-/green-/blue-/yellow-100/500/700  每个色 3 档
+ *
+ * 💡 例子（自定义主题色）：
+ *   :root {
+ *     --nova-bg:      #f5f3ff;   /* 改成紫色调 *\/
+ *     --nova-surface: #ffffff;
+ *     --nova-text:    #1e1b4b;
+ *   }
+ * ============================================================ */
+
+/* ===== 浅色模式 (默认) ===== */
+:root {
+  /* 语义令牌 - 改这些就改了主题颜色 */
+  --nova-bg:         #f9fafb;
+  --nova-surface:    #ffffff;
+  --nova-surface-2:  #f3f4f6;
+  --nova-text:       #111827;
+  --nova-text-muted: #6b7280;
+  --nova-border:     #e5e7eb;
+
+  /* 灰阶 (固定色阶, 不会随暗色模式变化, 用于按钮/分割线) */
+  --gray-50:  #f9fafb;
+  --gray-100: #f3f4f6;
+  --gray-200: #e5e7eb;
+  --gray-300: #d1d5db;
+  --gray-500: #6b7280;
+  --gray-700: #374151;
+  --gray-800: #1f2937;
+  --gray-900: #111827;
+
+  /* 状态色 (固定, 暗色模式下保持一致) */
+  --red-100:    #fee2e2;
+  --red-500:    #ef4444;
+  --red-700:    #b91c1c;
+  --green-100:  #d1fae5;
+  --green-500:  #10b981;
+  --green-700:  #047857;
+  --blue-100:   #dbeafe;
+  --blue-500:   #3b82f6;
+  --blue-700:   #1d4ed8;
+  --yellow-100: #fef3c7;
+  --yellow-500: #f59e0b;
+  --yellow-700: #b45309;
+}
+
+/* ===== 暗色模式 (只要在 <html> 加 .dark 或 data-theme="dark" 就生效) ===== */
+.dark,
+[data-theme="dark"] {
+  --nova-bg:         #0f172a;
+  --nova-surface:    #1f2937;
+  --nova-surface-2:  #374151;
+  --nova-text:       #f9fafb;
+  --nova-text-muted: #9ca3af;
+  --nova-border:     #374151;
+}
+
+
+/* ============================================================
+ * 2. 显示 Display
+ * ============================================================
+ * 控制元素"如何显示"——占整行、和文字一起排、变 Flex 容器。
+ *
+ * | class         | CSS                  | 用途                     |
+ * |---------------|----------------------|--------------------------|
+ * | .block        | display: block       | 独占一行（默认 div/p/h1） |
+ * | .inline-block | display: inline-block| 不独占，但可设宽高         |
+ * | .flex         | display: flex        | 弹性盒子（最常用）         |
+ * | .inline-flex  | display: inline-flex | 行内弹性盒子               |
+ * | .grid         | display: grid        | 网格布局                  |
+ * | .hidden       | display: none        | 隐藏元素                  |
+ *
+ * 💡 DOM 例子：
+ *   <!-- 横向并排 3 个按钮 -->
+ *   <div class="flex gap-2">
+ *     <button>A</button>
+ *     <button>B</button>
+ *     <button>C</button>
+ *   </div>
+ *
+ *   <!-- 临时隐藏一个元素 -->
+ *   <div class="hidden">看不见我</div>
+ * ============================================================ */
+.block         { display: block; }
+.inline-block  { display: inline-block; }
+.flex          { display: flex; }
+.inline-flex   { display: inline-flex; }
+.grid          { display: grid; }
+.hidden        { display: none; }
+
+
+/* ============================================================
+ * 3. Flex 方向（Flex Direction & Wrap）
+ * ============================================================
+ * 父元素需要先加 .flex/.inline-flex，本节才有意义。
+ *
+ * | class      | CSS                | 说明                |
+ * |------------|--------------------|---------------------|
+ * | .flex-row  | flex-direction: row | 默认值，横着排       |
+ * | .flex-col  | flex-direction: col | 竖着排              |
+ * | .flex-wrap | flex-wrap: wrap     | 子元素超出宽度时换行 |
+ *
+ * 💡 DOM 例子：
+ *   <div class="flex flex-row gap-2">  <!-- 横向 -->
+ *     <div>A</div><div>B</div>
+ *   </div>
+ *
+ *   <div class="flex flex-col gap-2">  <!-- 纵向 -->
+ *     <div>第一行</div>
+ *     <div>第二行</div>
+ *   </div>
+ * ============================================================ */
+.flex-row      { flex-direction: row; }
+.flex-col      { flex-direction: column; }
+.flex-wrap     { flex-wrap: wrap; }
+
+
+/* ============================================================
+ * 4. Flex 对齐（Align Items & Justify Content）
+ * ============================================================
+ *
+ * 交叉轴对齐（垂直于主方向）— align-items：
+ * | class           | 效果                  |
+ * |-----------------|-----------------------|
+ * | .items-start    | 顶/左对齐             |
+ * | .items-center   | 居中                  |
+ * | .items-end      | 底/右对齐             |
+ * | .items-stretch  | 拉伸填满（默认）       |
+ *
+ * 主轴对齐（主方向上的分布）— justify-content：
+ * | class             | 效果                 |
+ * |-------------------|----------------------|
+ * | .justify-start    | 靠起点排             |
+ * | .justify-center   | 居中                 |
+ * | .justify-end      | 靠终点排             |
+ * | .justify-between  | 两端贴边，中间均分   |
+ * | .justify-around   | 每个子元素两边等距   |
+ *
+ * 子元素占满剩余空间：
+ * | class    | 效果                              |
+ * |----------|-----------------------------------|
+ * | .flex-1  | flex: 1 1 0%（把剩余空间全吃掉）  |
+ *
+ * 💡 DOM 例子（最常见组合）：
+ *   <!-- 顶部导航：标题左、时间右 -->
+ *   <div class="flex justify-between items-center">
+ *     <div>标题</div>
+ *     <div>右侧</div>
+ *   </div>
+ *
+ *   <!-- 居中显示 -->
+ *   <div class="flex items-center justify-center">
+ *     <span>居中</span>
+ *   </div>
+ *
+ *   <!-- 等宽按钮组 -->
+ *   <div class="flex gap-2">
+ *     <button class="flex-1">开</button>
+ *     <button class="flex-1">关</button>
+ *   </div>
+ * ============================================================ */
+.items-start    { align-items: flex-start; }
+.items-center   { align-items: center; }
+.items-end      { align-items: flex-end; }
+.items-stretch  { align-items: stretch; }
+
+.justify-start    { justify-content: flex-start; }
+.justify-center   { justify-content: center; }
+.justify-end      { justify-content: flex-end; }
+.justify-between  { justify-content: space-between; }
+.justify-around   { justify-content: space-around; }
+
+.flex-1 { flex: 1 1 0%; }
+
+
+/* ============================================================
+ * 5. Gap（Flex/Grid 子元素间距）
+ * ============================================================
+ * 4px 基准：1=4px, 2=8px, 3=12px, 4=16px, 6=24px, 8=32px
+ *
+ * | class  | 实际值 |
+ * |--------|--------|
+ * | .gap-1 | 4px    |
+ * | .gap-2 | 8px    |
+ * | .gap-3 | 12px   |
+ * | .gap-4 | 16px（最常用） |
+ * | .gap-6 | 24px   |
+ * | .gap-8 | 32px   |
+ *
+ * 💡 推荐用 gap 而不是给子元素加 margin，gap 一行搞定。
+ *
+ * 💡 DOM 例子：
+ *   <div class="flex gap-4">    <!-- 子元素之间 16px 间距 -->
+ *     <div>A</div><div>B</div>
+ *   </div>
+ *
+ *   <div class="grid grid-cols-3 gap-2">  <!-- 3 列网格 + 8px 间距 -->
+ *     <div>1</div><div>2</div><div>3</div>
+ *   </div>
+ * ============================================================ */
+.gap-1 { gap: 0.25rem; }
+.gap-2 { gap: 0.5rem;  }
+.gap-3 { gap: 0.75rem; }
+.gap-4 { gap: 1rem;    }
+.gap-6 { gap: 1.5rem;  }
+.gap-8 { gap: 2rem;    }
+
+
+/* ============================================================
+ * 6. Grid 网格
+ * ============================================================
+ * 父元素需要先加 .grid，本节才有意义。
+ *
+ * | class        | 效果                            |
+ * |--------------|---------------------------------|
+ * | .grid-cols-2 | 2 等列                          |
+ * | .grid-cols-3 | 3 等列（仪表盘最常用）           |
+ * | .grid-cols-4 | 4 等列                          |
+ *
+ * 一行口诀：单行单列用 flex，多行多列用 grid。
+ *
+ * 💡 DOM 例子：
+ *   <div class="grid grid-cols-3 gap-4">  <!-- 3 列等宽 -->
+ *     <div class="bg-white p-4 rounded shadow">卡片 1</div>
+ *     <div class="bg-white p-4 rounded shadow">卡片 2</div>
+ *     <div class="bg-white p-4 rounded shadow">卡片 3</div>
+ *   </div>
+ * ============================================================ */
+.grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.col-span-2  { grid-column: span 2 / span 2; }
+.col-span-3  { grid-column: span 3 / span 3; }
+
+
+/* ============================================================
+ * 7. 宽度 Width
+ * ============================================================
+ *
+ * 比例宽度（按父容器百分比）：
+ * | class     | 实际值        | 用途                |
+ * |-----------|---------------|---------------------|
+ * | .w-full   | 100%          | 占满父容器          |
+ * | .w-1/2    | 50%           | 一半宽              |
+ * | .w-1/3    | 33.333%       | 三等分之一          |
+ * | .w-2/3    | 66.666%       | 三等分之二          |
+ * | .w-1/4    | 25%           | 四等分之一          |
+ * | .w-3/4    | 75%           | 四等分之三          |
+ *
+ * 固定宽度（rem = 16px 基准）：
+ * | class  | 像素值  | 典型用途             |
+ * |--------|---------|----------------------|
+ * | .w-12  | 48px    | 小按钮、图标         |
+ * | .w-16  | 64px    | 中等图标             |
+ * | .w-24  | 96px    | 大头像、卡片图标     |
+ * | .w-32  | 128px   | 较大卡片             |
+ *
+ * 💡 DOM 例子（水平居中）：
+ *   <div class="mx-auto w-1/2">  <!-- 水平居中，宽度 50% -->
+ *     内容
+ *   </div>
+ *
+ *   <!-- 侧边栏 + 主内容 -->
+ *   <div class="flex">
+ *     <div class="w-1/4">侧边栏</div>
+ *     <div class="flex-1">主内容</div>
+ *   </div>
+ * ============================================================ */
+.w-full  { width: 100%; }
+.w-1\/2  { width: 50%;     }
+.w-1\/3  { width: 33.333%; }
+.w-2\/3  { width: 66.666%; }
+.w-1\/4  { width: 25%;     }
+.w-3\/4  { width: 75%;     }
+.w-12    { width: 3rem;    }
+.w-16    { width: 4rem;    }
+.w-24    { width: 6rem;    }
+.w-32    { width: 8rem;    }
+
+
+/* ============================================================
+ * 8. 高度 Height
+ * ============================================================
+ *
+ * | class         | 实际值      | 用途                       |
+ * |---------------|-------------|----------------------------|
+ * | .h-full       | 100%        | 占满父容器（父容器需有高度）|
+ * | .h-screen     | 100vh       | 占满整个浏览器视口          |
+ * | .min-h-screen | min-height: 100vh | 至少占满视口（内容多时可超）|
+ *
+ * 固定高度：
+ * | class  | 像素值  | 典型用途                |
+ * |--------|---------|-------------------------|
+ * | .h-12  | 48px    | 小图标                  |
+ * | .h-16  | 64px    | 头像                    |
+ * | .h-24  | 96px    | 中等卡片                |
+ * | .h-32  | 128px   | 大卡片                  |
+ * | .h-40  | 160px   | 图表区                  |
+ * | .h-48  | 192px   | 大图表区                |
+ *
+ * 💡 DOM 例子：
+ *   <!-- 全屏应用 -->
+ *   <body class="min-h-screen bg-gray-50">  <!-- 内容少时背景也铺满 -->
+ *     ...
+ *   </body>
+ *
+ *   <!-- 固定高度图表区 -->
+ *   <div class="bg-white p-4">
+ *     <div class="flex items-end gap-1 h-40">
+ *       <div class="bg-blue-500 w-full" style="height: 60%"></div>
+ *     </div>
+ *   </div>
+ * ============================================================ */
+.h-full      { height: 100%;  }
+.h-screen    { height: 100vh; }
+.min-h-screen{ min-height: 100vh; }
+.h-12        { height: 3rem;  }
+.h-16        { height: 4rem;  }
+.h-24        { height: 6rem;  }
+.h-32        { height: 8rem;  }
+.h-40        { height: 10rem; }
+.h-48        { height: 12rem; }
+
+
+/* ============================================================
+ * 9. Padding（内边距）
+ * ============================================================
+ * 元素**内部**的留白，让内容有"呼吸感"。
+ * 4px 基准：1=4px, 2=8px, 3=12px, 4=16px, 6=24px, 8=32px
+ *
+ * 4 边相同：   .p-1 ~ .p-8
+ * 仅左右：     .px-2 / .px-3 / .px-4 / .px-6
+ * 仅上下：     .py-1 / .py-2 / .py-3 / .py-4
+ *
+ * | 写法 | 含义             |
+ * |------|------------------|
+ * | p-4  | 上下左右都 16px  |
+ * | px-4 | 左右 16px        |
+ * | py-4 | 上下 16px        |
+ *
+ * 💡 DOM 例子：
+ *   <!-- 卡片：4 边内边距 16px -->
+ *   <div class="bg-white p-4 rounded shadow">卡片</div>
+ *
+ *   <!-- 按钮：左右 16px，上下 8px（最常见） -->
+ *   <button class="px-4 py-2 bg-blue-500 text-white rounded">按钮</button>
+ * ============================================================ */
+.p-1  { padding: 0.25rem; }
+.p-2  { padding: 0.5rem;  }
+.p-3  { padding: 0.75rem; }
+.p-4  { padding: 1rem;    }
+.p-6  { padding: 1.5rem;  }
+.p-8  { padding: 2rem;    }
+
+.px-2 { padding-left: 0.5rem;   padding-right: 0.5rem;   }
+.px-3 { padding-left: 0.75rem;  padding-right: 0.75rem;  }
+.px-4 { padding-left: 1rem;     padding-right: 1rem;     }
+.px-6 { padding-left: 1.5rem;   padding-right: 1.5rem;   }
+
+.py-1 { padding-top: 0.25rem;  padding-bottom: 0.25rem; }
+.py-2 { padding-top: 0.5rem;   padding-bottom: 0.5rem;  }
+.py-3 { padding-top: 0.75rem;  padding-bottom: 0.75rem; }
+.py-4 { padding-top: 1rem;     padding-bottom: 1rem;    }
+
+
+/* ============================================================
+ * 10. Margin（外边距）
+ * ============================================================
+ * 元素**外部**的留白，把自己和别的东西隔开。
+ * 4px 基准：1=4px, 2=8px, 3=12px, 4=16px
+ *
+ * 4 边相同：   .m-1 ~ .m-4
+ * 自动（水平居中）：.m-auto / .mx-auto
+ * 仅上：       .mt-1 / .mt-2 / .mt-4
+ * 仅下：       .mb-1 / .mb-2 / .mb-4
+ *
+ * 💡 经验法则：
+ *   - 想让元素"自己变大" → 用 padding
+ *   - 想让元素"远离别人" → 用 margin
+ *   - 子元素之间留空 → 父元素用 .gap-*（更简单）
+ *
+ * 💡 DOM 例子：
+ *   <!-- 水平居中（最常用） -->
+ *   <div class="mx-auto w-1/2">居中内容</div>
+ *
+ *   <!-- 标题与正文隔开 -->
+ *   <h1 class="mb-4">标题</h1>
+ *   <p>正文</p>
+ * ============================================================ */
+.m-1  { margin: 0.25rem; }
+.m-2  { margin: 0.5rem;  }
+.m-3  { margin: 0.75rem; }
+.m-4  { margin: 1rem;    }
+.m-auto   { margin: auto;        }
+.mx-auto  { margin-left: auto;   margin-right: auto;  }
+.mt-1     { margin-top: 0.25rem;  }
+.mt-2     { margin-top: 0.5rem;   }
+.mt-3     { margin-top: 0.75rem; }
+.mt-4     { margin-top: 1rem;     }
+.mt-6     { margin-top: 1.5rem;  }
+.mt-8     { margin-top: 2rem;    }
+.mb-1     { margin-bottom: 0.25rem; }
+.mb-2     { margin-bottom: 0.5rem;  }
+.mb-3     { margin-bottom: 0.75rem; }
+.mb-4     { margin-bottom: 1rem;    }
+.mb-6     { margin-bottom: 1.5rem;  }
+.mb-8     { margin-bottom: 2rem;    }
+
+
+/* ============================================================
+ * 11. 文字大小 Text Size
+ * ============================================================
+ *
+ * | class      | 像素  | 典型用途                        |
+ * |------------|-------|---------------------------------|
+ * | .text-xs   | 12px  | 极小字（版权、辅助说明）         |
+ * | .text-sm   | 14px  | 标签、次要文字                   |
+ * | .text-base | 16px  | 正文（默认）                     |
+ * | .text-lg   | 18px  | 强调正文                         |
+ * | .text-xl   | 20px  | 小标题                           |
+ * | .text-2xl  | 24px  | 卡片标题                         |
+ * | .text-3xl  | 30px  | 大数据展示                       |
+ * | .text-4xl  | 36px  | 极大数据展示                     |
+ *
+ * 💡 DOM 例子（IoT 传感器卡片的标准三层结构）：
+ *   <div class="text-center">
+ *     <div class="text-sm text-gray-500">温度</div>      <!-- 标签 -->
+ *     <div class="text-3xl font-bold mt-2">24.5°C</div> <!-- 数值 -->
+ *     <div class="text-xs text-green-500 mt-2">↑ 正常</div> <!-- 状态 -->
+ *   </div>
+ * ============================================================ */
+.text-xs   { font-size: 0.75rem;   }
+.text-sm   { font-size: 0.875rem;  }
+.text-base { font-size: 1rem;      }
+.text-lg   { font-size: 1.125rem;  }
+.text-xl   { font-size: 1.25rem;   }
+.text-2xl  { font-size: 1.5rem;    }
+.text-3xl  { font-size: 1.875rem;  }
+.text-4xl  { font-size: 2.25rem;   }
+
+
+/* ============================================================
+ * 12. 字重 Font Weight
+ * ============================================================
+ *
+ * | class         | font-weight | 用途             |
+ * |---------------|-------------|------------------|
+ * | .font-normal  | 400         | 普通正文         |
+ * | .font-medium  | 500         | 略重（标题常用） |
+ * | .font-bold    | 700         | 加粗（重点数据） |
+ *
+ * 💡 DOM 例子：
+ *   <div class="text-2xl font-bold">24.5°C</div>      <!-- 大数字加粗 -->
+ *   <span class="font-medium">客厅灯</span>            <!-- 卡片标题略重 -->
+ * ============================================================ */
+.font-normal  { font-weight: 400; }
+.font-medium  { font-weight: 500; }
+.font-bold    { font-weight: 700; }
+
+
+/* ============================================================
+ * 13. 文字对齐 Text Align
+ * ============================================================
+ *
+ * | class       | 效果         |
+ * |-------------|--------------|
+ * | .text-left  | 左对齐（默认）|
+ * | .text-center| 居中          |
+ * | .text-right | 右对齐        |
+ *
+ * 💡 DOM 例子：
+ *   <div class="text-center">居中的标题</div>
+ *   <div class="text-right">右下角的时间</div>
+ * ============================================================ */
+.text-left    { text-align: left;    }
+.text-center  { text-align: center;  }
+.text-right   { text-align: right;   }
+
+
+/* ============================================================
+ * 14. 文字颜色 Text Color
+ * ============================================================
+ *
+ * 灰阶（语义色，暗色模式会自动翻转）：
+ * | class            | 用途                 |
+ * |------------------|----------------------|
+ * | .text-white      | 白字（深底用）       |
+ * | .text-gray-100   | 极浅灰（深底次要字） |
+ * | .text-gray-300   | 浅灰                 |
+ * | .text-gray-500   | 次要文字             |
+ * | .text-gray-700   | 二级文字             |
+ * | .text-gray-900   | 主文字               |
+ *
+ * 状态色（固定，不随暗色模式变）：
+ * | class          | 用途                 |
+ * |----------------|----------------------|
+ * | .text-red-500  | 错误/异常            |
+ * | .text-red-700  | 错误强调             |
+ * | .text-green-500| 成功/正常            |
+ * | .text-green-700| 成功强调             |
+ * | .text-blue-500 | 信息/链接            |
+ * | .text-blue-700 | 信息强调             |
+ * | .text-yellow-500| 警告                |
+ * | .text-yellow-700| 警告强调            |
+ *
+ * 💡 语义约定（重要）：
+ *   绿=正常/开启    红=异常/关闭    黄=警告    蓝=信息    灰=中性
+ *
+ * 💡 DOM 例子：
+ *   <div class="text-3xl font-bold text-red-500">32.1°C</div>  <!-- 异常数据 -->
+ *   <div class="text-sm text-gray-500">上次更新：3 分钟前</div>
+ * ============================================================ */
+.text-white      { color: #fff; }
+.text-gray-100   { color: var(--gray-100); }
+.text-gray-300   { color: var(--gray-300); }
+.text-gray-500   { color: var(--nova-text-muted); }
+.text-gray-700   { color: var(--gray-700); }
+.text-gray-900   { color: var(--nova-text); }
+.text-red-500    { color: var(--red-500);   }
+.text-red-700    { color: var(--red-700);   }
+.text-green-500  { color: var(--green-500); }
+.text-green-700  { color: var(--green-700); }
+.text-blue-500   { color: var(--blue-500);  }
+.text-blue-700   { color: var(--blue-700);  }
+.text-yellow-500 { color: var(--yellow-500);}
+.text-yellow-700 { color: var(--yellow-700);}
+
+
+/* ============================================================
+ * 15. 背景颜色 Background Color
+ * ============================================================
+ *
+ * 灰阶（语义色，暗色模式会自动翻转）：
+ * | class          | 用途                     |
+ * |----------------|--------------------------|
+ * | .bg-white      | 卡片背景（默认白色）     |
+ * | .bg-gray-50    | 页面背景                 |
+ * | .bg-gray-100   | 次级背景（输入框、选中态）|
+ * | .bg-gray-200   | 弱背景（禁用按钮）       |
+ * | .bg-gray-300   | 中性灰                   |
+ * | .bg-gray-500   | 中性灰                   |
+ * | .bg-gray-700   | 深灰（次按钮）           |
+ * | .bg-gray-800   | 顶栏背景                 |
+ * | .bg-gray-900   | 最深（暗色卡片）         |
+ *
+ * 状态色（固定，不随暗色模式变）：
+ *   每个色 3 档：-100（浅色背景）/ -500（默认主色）/ -700（按下）
+ *
+ *   .bg-red-100/500/700    红
+ *   .bg-green-100/500/700  绿
+ *   .bg-blue-100/500/700   蓝
+ *   .bg-yellow-100/500/700 黄
+ *
+ * 💡 经典组合：
+ *   <!-- 主操作按钮（蓝） -->
+ *   <button class="bg-blue-500 text-white px-4 py-2 rounded">提交</button>
+ *
+ *   <!-- 信息提示框 -->
+ *   <div class="bg-blue-100 text-blue-700 p-3 rounded">💡 提示</div>
+ *
+ *   <!-- 警告框 -->
+ *   <div class="bg-yellow-100 text-yellow-700 p-3 rounded">⚠️ 警告</div>
+ * ============================================================ */
+.bg-white      { background-color: var(--nova-surface); }
+.bg-gray-50    { background-color: var(--nova-bg); }
+.bg-gray-100   { background-color: var(--nova-surface-2); }
+.bg-gray-200   { background-color: var(--gray-200); }
+.bg-gray-300   { background-color: var(--gray-300); }
+.bg-gray-500   { background-color: var(--gray-500); }
+.bg-gray-700   { background-color: var(--gray-700); }
+.bg-gray-800   { background-color: var(--gray-800); }
+.bg-gray-900   { background-color: var(--gray-900); }
+
+.bg-red-100    { background-color: var(--red-100); }
+.bg-red-500    { background-color: var(--red-500); }
+.bg-red-700    { background-color: var(--red-700); }
+
+.bg-green-100  { background-color: var(--green-100); }
+.bg-green-500  { background-color: var(--green-500); }
+.bg-green-700  { background-color: var(--green-700); }
+
+.bg-blue-100   { background-color: var(--blue-100); }
+.bg-blue-500   { background-color: var(--blue-500); }
+.bg-blue-700   { background-color: var(--blue-700); }
+
+.bg-yellow-100 { background-color: var(--yellow-100); }
+.bg-yellow-500 { background-color: var(--yellow-500); }
+.bg-yellow-700 { background-color: var(--yellow-700); }
+
+
+/* ============================================================
+ * 16. 边框 Border
+ * ============================================================
+ *
+ * | class                | 效果                       |
+ * |----------------------|----------------------------|
+ * | .border              | 1px 边框（默认颜色）        |
+ * | .border-2            | 2px 边框（更醒目）          |
+ * | .border-gray-200     | 灰色边框（最常用）          |
+ * | .border-gray-300     | 深一档的灰色边框            |
+ * | .border-red-500      | 红色边框（错误状态）        |
+ * | .border-green-500    | 绿色边框（成功状态）        |
+ * | .border-blue-500     | 蓝色边框（信息状态）        |
+ * | .border-yellow-500   | 黄色边框（警告状态）        |
+ *
+ * 💡 DOM 例子（信息提示框）：
+ *   <div class="bg-red-100 border border-red-500 text-red-700 p-3 rounded">
+ *     ❌ 这是一条错误信息
+ *   </div>
+ * ============================================================ */
+.border          { border: 1px solid var(--nova-border); }
+.border-2        { border: 2px solid var(--nova-border); }
+.border-gray-200 { border-color: var(--nova-border); }
+.border-gray-300 { border-color: var(--nova-border); }
+.border-red-500  { border-color: var(--red-500);   }
+.border-green-500{ border-color: var(--green-500); }
+.border-blue-500 { border-color: var(--blue-500);  }
+.border-yellow-500{border-color: var(--yellow-500);}
+
+
+/* ============================================================
+ * 17. 圆角 Rounded（Border Radius）
+ * ============================================================
+ *
+ * | class         | 圆角    | 典型用途               |
+ * |---------------|---------|------------------------|
+ * | .rounded      | 4px     | 小元素（标签、徽章）   |
+ * | .rounded-md   | 6px     | 输入框                 |
+ * | .rounded-lg   | 8px     | 卡片、按钮（最常用）   |
+ * | .rounded-xl   | 12px    | 大卡片                 |
+ * | .rounded-full | 50%     | 头像、状态圆点、圆形按钮|
+ *
+ * 单边圆角（用于柱状图顶部圆角、表格特定角）：
+ * | class      | 效果                |
+ * |------------|---------------------|
+ * | .rounded-t | 仅顶部两个角变圆     |
+ * | .rounded-b | 仅底部两个角变圆     |
+ *
+ * 💡 DOM 例子：
+ *   <!-- 圆形状态指示灯（最经典用法） -->
+ *   <span class="w-2 h-2 rounded-full bg-green-500"></span>
+ *
+ *   <!-- 柱状图顶部圆角 -->
+ *   <div class="bg-blue-500 w-full rounded-t" style="height: 60%"></div>
+ *
+ *   <!-- 状态徽章 -->
+ *   <span class="px-2 py-1 rounded bg-green-100 text-green-700 text-xs">
+ *     在线
+ *   </span>
+ * ============================================================ */
+.rounded      { border-radius: 0.25rem; }
+.rounded-md   { border-radius: 0.375rem;}
+.rounded-lg   { border-radius: 0.5rem;  }
+.rounded-xl   { border-radius: 0.75rem; }
+.rounded-full { border-radius: 9999px;  }
+.rounded-t    { border-top-left-radius: 0.25rem; border-top-right-radius: 0.25rem; }
+.rounded-b    { border-bottom-left-radius: 0.25rem; border-bottom-right-radius: 0.25rem; }
+
+
+/* ============================================================
+ * 18. 阴影 Shadow
+ * ============================================================
+ *
+ * | class     | 用途                          |
+ * |-----------|-------------------------------|
+ * | .shadow-sm| 极淡阴影（输入框、内嵌元素）   |
+ * | .shadow   | 默认阴影（**卡片最常用**）     |
+ * | .shadow-md| 中等阴影（悬浮卡片）           |
+ * | .shadow-lg| 重阴影（弹窗、下拉菜单）       |
+ *
+ * 注：暗色模式下阴影会自动变弱（深底深阴影看着压抑）。
+ *
+ * 💡 DOM 例子（标准卡片）：
+ *   <div class="bg-white p-4 rounded-lg shadow">
+ *     带阴影的卡片
+ *   </div>
+ * ============================================================ */
+.shadow-sm { box-shadow: 0 1px 2px 0 rgba(0,0,0,0.05); }
+.shadow    { box-shadow: 0 1px 3px 0 rgba(0,0,0,0.1), 0 1px 2px 0 rgba(0,0,0,0.06); }
+.shadow-md { box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06); }
+.shadow-lg { box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05); }
+.dark .shadow,
+.dark .shadow-md,
+.dark .shadow-lg { box-shadow: 0 0 0 1px rgba(255,255,255,0.05); }
+
+
+/* ============================================================
+ * 19. 鼠标手势 Cursor
+ * ============================================================
+ *
+ * | class                | 光标样式           | 用途             |
+ * |----------------------|--------------------|------------------|
+ * | .cursor-pointer      | 👆 手指             | 可点击的按钮、链接 |
+ * | .cursor-not-allowed  | 🚫 禁止            | 禁用状态的元素   |
+ *
+ * 💡 DOM 例子：
+ *   <button class="cursor-pointer bg-blue-500 text-white px-4 py-2 rounded">
+ *     可点击按钮
+ *   </button>
+ *
+ *   <button disabled class="cursor-not-allowed bg-gray-200 text-gray-500 px-4 py-2 rounded">
+ *     禁用按钮
+ *   </button>
+ * ============================================================ */
+.cursor-pointer    { cursor: pointer; }
+.cursor-not-allowed{ cursor: not-allowed; }
+
+
+/* ============================================================
+ * 20. 过渡动画 Transition
+ * ============================================================
+ *
+ * | class         | 效果                          |
+ * |---------------|-------------------------------|
+ * | .transition   | transition: all 0.15s ease-in-out |
+ * | .duration-150 | transition-duration: 150ms     |
+ *
+ * 一般这两个一起用：让按钮 hover 时颜色变化"丝滑"一点，不要太突兀。
+ *
+ * 💡 DOM 例子（带过渡的按钮）：
+ *   <button class="transition bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded cursor-pointer">
+ *     鼠标移上来有平滑过渡
+ *   </button>
+ * ============================================================ */
+.transition   { transition: all 0.15s ease-in-out; }
+.duration-150 { transition-duration: 150ms; }
+
+
+/* ============================================================
+ * 21. Hover 变体
+ * ============================================================
+ * Nova Style 的 hover 变体只覆盖按钮场景（背景色加深）。
+ * 一般配合 .transition 使用才能平滑过渡。
+ *
+ * | class                  | 效果                 |
+ * |------------------------|----------------------|
+ * | .hover:bg-blue-700     | 鼠标悬停时背景变深蓝 |
+ * | .hover:bg-green-700    | 鼠标悬停时背景变深绿 |
+ * | .hover:bg-red-700      | 鼠标悬停时背景变深红 |
+ * | .hover:bg-gray-700     | 鼠标悬停时背景变深灰 |
+ * | .hover:bg-gray-100     | 鼠标悬停时背景变浅灰（次按钮）|
+ *
+ * 💡 DOM 例子（标准可交互按钮）：
+ *   <button class="transition cursor-pointer
+ *                  bg-blue-500 hover:bg-blue-700
+ *                  text-white px-4 py-2 rounded">
+ *     保存
+ *   </button>
+ * ============================================================ */
+.hover\:bg-blue-700:hover  { background-color: var(--blue-700);  }
+.hover\:bg-green-700:hover { background-color: var(--green-700); }
+.hover\:bg-red-700:hover   { background-color: var(--red-700);   }
+.hover\:bg-gray-700:hover  { background-color: var(--gray-700);  }
+.hover\:bg-gray-100:hover  { background-color: var(--nova-surface-2); }
+
+
+/* ============================================================
+ * 22. 表单元素内置样式
+ * ============================================================
+ * 这一节不是工具类，而是给原生 input/select/textarea 自动加基础样式。
+ * 开发者不用加任何 class，元素看起来就已经很"成型"——并且自动适配暗色模式。
+ *
+ * 涵盖元素：
+ *   input[type="text|number|email|password"]
+ *   select / textarea
+ *   input[type="checkbox"]   默认绿勾
+ *   input[type="range"]      默认蓝条
+ *   label                    灰色小字
+ *
+ * 如果不想用默认样式，给元素加 .input 这个 class 也会得到同样的样式。
+ *
+ * 💡 DOM 例子（完整表单）：
+ *   <form>
+ *     <label>设备名称</label>
+ *     <input type="text" placeholder="给设备起个名字">
+ *
+ *     <label>设备类型</label>
+ *     <select>
+ *       <option>💡 灯</option>
+ *       <option>❄️ 空调</option>
+ *     </select>
+ *
+ *     <label>亮度 <span id="v">75</span>%</label>
+ *     <input type="range" min="0" max="100" value="75">
+ *
+ *     <input type="checkbox" id="auto" checked>
+ *     <label for="auto">通电后自动开启</label>
+ *   </form>
+ *
+ * CSS 焦点（focus）样式：
+ *   input/select/textarea 获取焦点时，border 会自动变成蓝色。
+ * ============================================================ */
+.input,
+input[type="text"],
+input[type="number"],
+input[type="email"],
+input[type="password"],
+select,
+textarea {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--nova-border);
+  border-radius: 0.5rem;
+  background-color: var(--nova-surface);
+  color: var(--nova-text);
+  font-size: 1rem;
+  font-family: inherit;
+  transition: border-color 0.15s;
+}
+.input:focus,
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: var(--blue-500);
+}
+input[type="checkbox"] {
+  width: 1rem;
+  height: 1rem;
+  accent-color: var(--green-500);
+  cursor: pointer;
+}
+input[type="range"] {
+  width: 100%;
+  accent-color: var(--blue-500);
+  cursor: pointer;
+  padding: 0;
+  border: none;
+  background: transparent;
+}
+label {
+  display: block;
+  font-size: 0.875rem;
+  color: var(--nova-text-muted);
+  margin-bottom: 0.25rem;
+}

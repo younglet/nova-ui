@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>Nova UI - 卡片、徽章、提示框</title>
+  <link rel="stylesheet" href="../src/nova-style.css">
+  <link rel="stylesheet" href="../src/nova-ui.css">
+</head>
+<body class="bg-gray-50 p-4">
+
+  <h1 class="text-2xl font-bold mb-1">卡片、徽章、提示框</h1>
+  <p class="text-sm text-gray-500 mb-6">数据展示的三大基础组件</p>
+
+  <!-- Card 基础 -->
+  <section class="mb-6">
+    <h2 class="text-lg font-bold mb-3">Card 卡片</h2>
+    <div class="grid grid-cols-2 gap-4">
+      <div class="card">
+        <div class="card-body">
+          <h3 class="card-title">基础卡片</h3>
+          <p class="text-sm text-gray-500">白底、圆角、阴影，最常见的容器。</p>
+          <div class="card-actions">
+            <button class="btn btn-ghost btn-sm">取消</button>
+            <button class="btn btn-primary btn-sm">确定</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card card-bordered">
+        <div class="card-body card-body-lg">
+          <h3 class="card-title">带边框卡片</h3>
+          <p class="text-sm text-gray-500">用 border 代替阴影，更素雅。</p>
+          <div class="card-actions">
+            <button class="btn btn-outline btn-sm">查看</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-body">
+          <h3 class="card-title">带 Footer 的卡片</h3>
+          <p class="text-sm text-gray-500">底部加 footer 区域放次要信息。</p>
+        </div>
+        <div class="card-footer text-sm text-gray-500">
+          上次更新：5 分钟前
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-body">
+          <h3 class="card-title">带徽章的卡片</h3>
+          <div class="flex gap-2 mb-2">
+            <span class="badge badge-success">在线</span>
+            <span class="badge badge-info">v2.0</span>
+            <span class="badge badge-neutral">普通</span>
+          </div>
+          <p class="text-sm text-gray-500">徽章 + 卡片是 IoT 仪表盘的常见组合。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Badge -->
+  <section class="mb-6">
+    <h2 class="text-lg font-bold mb-3">Badge 徽章</h2>
+    <div class="card">
+      <div class="card-body">
+        <div class="flex gap-2 flex-wrap mb-3">
+          <span class="badge badge-success">在线</span>
+          <span class="badge badge-error">故障</span>
+          <span class="badge badge-warning">警告</span>
+          <span class="badge badge-info">信息</span>
+          <span class="badge badge-neutral">离线</span>
+        </div>
+        <div class="flex gap-2 flex-wrap mb-3 items-center">
+          <span class="badge badge-sm badge-success">小号</span>
+          <span class="badge badge-success">默认</span>
+          <span class="badge badge-lg badge-success">大号</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Alert -->
+  <section>
+    <h2 class="text-lg font-bold mb-3">Alert 提示框</h2>
+    <div class="flex flex-col gap-2">
+      <div class="alert alert-info">
+        <span class="alert-icon">💡</span>
+        <div class="alert-content">
+          <div class="alert-title">提示</div>
+          <div>这是一条普通提示信息。</div>
+        </div>
+      </div>
+      <div class="alert alert-success">
+        <span class="alert-icon">✅</span>
+        <div class="alert-content">
+          <div class="alert-title">操作成功</div>
+          <div>设备已成功添加到您的账户。</div>
+        </div>
+      </div>
+      <div class="alert alert-warning">
+        <span class="alert-icon">⚠️</span>
+        <div class="alert-content">
+          <div class="alert-title">注意</div>
+          <div>电池电量低于 20%，请及时充电。</div>
+        </div>
+      </div>
+      <div class="alert alert-error">
+        <span class="alert-icon">❌</span>
+        <div class="alert-content">
+          <div class="alert-title">错误</div>
+          <div>设备连接断开，请检查网络。</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</body>
+</html>

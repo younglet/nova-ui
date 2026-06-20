@@ -1,0 +1,12 @@
+{
+  "name": "nova-ui-tests",
+  "version": "1.0.0",
+  "private": true,
+  "type": "commonjs",
+  "scripts": {
+    "test": "node run.js"
+  },
+  "dependencies": {
+    "jsdom": "^27.0.0"
+  }
+}

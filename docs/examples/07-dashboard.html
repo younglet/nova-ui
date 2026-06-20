@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>Nova UI - 综合 IoT 仪表盘</title>
+  <link rel="stylesheet" href="../nova-style.css">
+  <link rel="stylesheet" href="../nova-ui.css">
+</head>
+<body class="bg-gray-50 min-h-screen">
+
+  <!-- 顶部导航 -->
+  <div class="navbar navbar-dark">
+    <div class="navbar-brand">🌡️ 实验室环境监控</div>
+    <div class="navbar-actions">
+      <span class="status-dot status-online status-pulse"></span>
+      <span class="text-sm" id="time">--:--:--</span>
+      <button class="btn btn-sm" style="background-color: var(--gray-700); color: white;">⚙️ 设置</button>
+    </div>
+  </div>
+
+  <!-- Tab 切换 -->
+  <div class="p-4">
+    <div class="tabs tabs-boxed mb-4">
+      <div class="tab active" onclick="activate(this, 'realtime')">实时数据</div>
+      <div class="tab" onclick="activate(this, 'history')">历史趋势</div>
+      <div class="tab" onclick="activate(this, 'devices')">设备列表</div>
+      <div class="tab" onclick="activate(this, 'alerts')">告警日志</div>
+    </div>
+
+    <!-- 实时数据视图 -->
+    <div id="view-realtime">
+      <!-- 传感器网格 -->
+      <div class="grid grid-cols-4 gap-3 mb-4">
+        <div class="sensor-card">
+          <div class="sensor-label">空气温度</div>
+          <div class="sensor-value" id="t1">--<span class="sensor-unit">°C</span></div>
+          <div class="sensor-status sensor-status-normal">↑ 正常</div>
+        </div>
+        <div class="sensor-card">
+          <div class="sensor-label">空气湿度</div>
+          <div class="sensor-value" id="t2" style="color: var(--blue-500)">--<span class="sensor-unit">%</span></div>
+          <div class="sensor-status sensor-status-normal">↑ 正常</div>
+        </div>
+        <div class="sensor-card">
+          <div class="sensor-label">土壤湿度</div>
+          <div class="sensor-value" id="t3" style="color: var(--yellow-500)">--<span class="sensor-unit">%</span></div>
+          <div class="sensor-status sensor-status-normal">↑ 正常</div>
+        </div>
+        <div class="sensor-card">
+          <div class="sensor-label">光照</div>
+          <div class="sensor-value" id="t4">--<span class="sensor-unit">lx</span></div>
+          <div class="sensor-status sensor-status-normal">↑ 正常</div>
+        </div>
+      </div>
+
+      <!-- 设备控制 + 告警 -->
+      <div class="grid grid-cols-3 gap-3">
+        <div class="col-span-2">
+          <h3 class="text-sm font-bold text-gray-500 mb-2">设备控制</h3>
+          <div class="grid grid-cols-2 gap-3">
+            <div class="device-card">
+              <div class="device-card-header">
+                <div class="device-card-title">💡 实验室灯</div>
+                <span class="device-card-status device-card-status-on"></span>
+              </div>
+              <div class="device-card-actions mt-3">
+                <label class="switch">
+                  <input type="checkbox" id="d1" checked onchange="toggleDevice('d1', this.checked)">
+                  <span class="switch-slider"></span>
+                </label>
+              </div>
+            </div>
+            <div class="device-card">
+              <div class="device-card-header">
+                <div class="device-card-title">❄️ 空调</div>
+                <span class="device-card-status device-card-status-off"></span>
+              </div>
+              <div class="device-card-actions mt-3">
+                <label class="switch switch-primary">
+                  <input type="checkbox" id="d2" onchange="toggleDevice('d2', this.checked)">
+                  <span class="switch-slider"></span>
+                </label>
+              </div>
+            </div>
+            <div class="device-card">
+              <div class="device-card-header">
+                <div class="device-card-title">🌀 通风</div>
+                <span class="device-card-status device-card-status-on"></span>
+              </div>
+              <div class="device-card-actions mt-3">
+                <label class="switch">
+                  <input type="checkbox" id="d3" checked onchange="toggleDevice('d3', this.checked)">
+                  <span class="switch-slider"></span>
+                </label>
+              </div>
+            </div>
+            <div class="device-card">
+              <div class="device-card-header">
+                <div class="device-card-title">💧 加湿器</div>
+                <span class="device-card-status device-card-status-off"></span>
+              </div>
+              <div class="device-card-actions mt-3">
+                <label class="switch">
+                  <input type="checkbox" id="d4" onchange="toggleDevice('d4', this.checked)">
+                  <span class="switch-slider"></span>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <h3 class="text-sm font-bold text-gray-500 mb-2">告警</h3>
+          <div class="flex flex-col gap-2" id="alerts">
+            <div class="alert alert-warning">
+              <span class="alert-icon">⚠️</span>
+              <div class="alert-content">
+                <div class="alert-title">土壤湿度偏低</div>
+                <div class="text-xs">建议浇水</div>
+              </div>
+            </div>
+            <div class="alert alert-info">
+              <span class="alert-icon">💡</span>
+              <div class="alert-content">
+                <div class="alert-title">系统提示</div>
+                <div class="text-xs">所有传感器在线</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 占位视图 -->
+    <div id="view-history" class="card p-8 text-center text-gray-500" style="display:none">
+      <p>历史趋势图表（用 chart.js 或纯 div 柱状图实现）</p>
+    </div>
+    <div id="view-devices" class="card p-8 text-center text-gray-500" style="display:none">
+      <p>设备列表视图（用 table 或 grid 展示）</p>
+    </div>
+    <div id="view-alerts" class="card p-8 text-center text-gray-500" style="display:none">
+      <p>告警日志（按时间倒序）</p>
+    </div>
+  </div>
+
+  <!-- Toast 容器 -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <script>
+    // 实时数据模拟
+    function updateData() {
+      document.getElementById('t1').innerHTML = (22 + Math.random() * 6).toFixed(1) + '<span class="sensor-unit">°C</span>'
+      document.getElementById('t2').innerHTML = (55 + Math.random() * 20).toFixed(0) + '<span class="sensor-unit">%</span>'
+      document.getElementById('t3').innerHTML = (30 + Math.random() * 15).toFixed(0) + '<span class="sensor-unit">%</span>'
+      document.getElementById('t4').innerHTML = (300 + Math.random() * 400).toFixed(0) + '<span class="sensor-unit">lx</span>'
+    }
+    function tick() {
+      const d = new Date()
+      const p = n => String(n).padStart(2, '0')
+      document.getElementById('time').textContent =
+        p(d.getHours()) + ':' + p(d.getMinutes()) + ':' + p(d.getSeconds())
+    }
+    updateData(); tick()
+    setInterval(updateData, 2000)
+    setInterval(tick, 1000)
+
+    // Tab 切换
+    function activate(el, view) {
+      el.parentElement.querySelectorAll('.tab').forEach(t => t.classList.remove('active'))
+      el.classList.add('active')
+      document.querySelectorAll('[id^="view-"]').forEach(v => v.style.display = 'none')
+      document.getElementById('view-' + view).style.display = 'block'
+    }
+
+    // 设备切换
+    function toggleDevice(id, on) {
+      showToast(id + ' 已' + (on ? '开启' : '关闭'), on ? 'success' : 'info')
+    }
+
+    // Toast
+    function showToast(msg, type = 'info') {
+      const t = document.createElement('div')
+      t.className = 'toast toast-' + type
+      t.textContent = msg
+      document.getElementById('toast-container').appendChild(t)
+      setTimeout(() => t.remove(), 3000)
+    }
+  </script>
+
+</body>
+</html>
