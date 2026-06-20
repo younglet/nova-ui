@@ -45,12 +45,10 @@ nova-ui/
 │   ├── components/                 ← 20 个静态组件 + 8 个动态组件页
 │   └── .vitepress/config.ts        ← sidebar 配置
 ├── test/05-elements.test.js        ← 22 个自定义元素测试
-└── examples/                       ← 11 个 HTML demo
+└── examples/                       ← 10 个 HTML demo
     ├── 01-buttons.html ~ 08-complete-app.html  静态 demo
     ├── 09-js-api.html                          动态组件 demo
-    ├── 10-custom-elements.html                 同上备用
-    ├── with-nova-ui/                           nova-style 静态样式
-    └── demos/                                  小 demo 片段
+    └── 10-custom-elements.html                 同上备用
 ```
 
 ## 核心约定

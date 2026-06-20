@@ -169,9 +169,7 @@ nova-ui/
 │   └── public/            ← iframe demo 用的静态资源（与 src/ 同步）
 │
 ├── examples/             ← 可直接复制粘贴的 HTML 案例
-│   ├── 01-buttons.html ~ 10-custom-elements.html
-│   ├── with-nova-ui/      ← nova-style 静态样式版
-│   └── demos/             ← 小 demo 片段
+│   └── 01-buttons.html ~ 10-custom-elements.html
 │
 └── test/                 ← 22 个 jsdom 测试
     │   ├── config.ts            ← 站点配置（导航/侧边栏）
