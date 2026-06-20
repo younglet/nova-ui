@@ -6,6 +6,9 @@
   "type": "module",
   "scripts": {
     "build": "csso src/nova-ui.css -o src/nova-ui.min.css && csso src/nova-style.css -o src/nova-style.min.css && terser src/nova-ui-elements.js -c -m --comments false -o src/nova-ui-elements.min.js && terser src/novajs.js -c -m --comments false -o src/novajs.min.js",
+    "sync": "node scripts/sync-public.js",
+    "predocs:dev": "npm run build && npm run sync",
+    "predocs:build": "npm run build && npm run sync",
     "docs:dev": "vitepress dev docs",
     "docs:build": "vitepress build docs",
     "docs:preview": "vitepress preview docs"

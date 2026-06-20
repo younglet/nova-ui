@@ -1,0 +1,1174 @@
+/* ============================================================
+ * Nova UI v1.0 - 组件库（基于 Nova Style）
+ *
+ * ┌──────────────────────────────────────────────────────────┐
+ * │ 使用方法：必须先引入 nova-style.css，再引入本文件。       │
+ * │                                                          │
+ * │   <link rel="stylesheet" href="nova-style.css">          │
+ * │   <link rel="stylesheet" href="nova-ui.css">             │
+ * │                                                          │
+ * │ 然后就可以直接用组件 class：                             │
+ * │   <button class="btn btn-primary">保存</button>          │
+ * │   <div class="card"><div class="card-body">...</div></div>│
+ * └──────────────────────────────────────────────────────────┘
+ *
+ * 包含组件（约 20 个）：
+ *   1.  Button 按钮       2. Card 卡片
+ *   3.  Badge 徽章        4. Alert 提示框
+ *   5.  Stat 数据展示     6. Progress 进度条
+ *   7.  Sensor Card       8. Device Card
+ *   9.  Status 状态点     10. Switch 开关
+ *   11. Modal 弹窗        12. Loading 加载
+ *   13. Navbar 顶栏       14. Drawer 侧边栏
+ *   15. Tabs 标签页       16. Toast 通知
+ *   17. Avatar 头像       18. Breadcrumb 面包屑
+ *   19. Divider 分割线    20. Input Group 输入框组合
+ *
+ * 配套文档：docs/components/*.md
+ * 配套案例：examples/*.html
+ * ============================================================ */
+
+
+/* ============================================================
+ * 1. Button 按钮
+ * ============================================================
+ *
+ * 用法：
+ *   <button class="btn btn-primary">保存</button>
+ *   <button class="btn btn-success btn-sm">确认</button>
+ *   <button class="btn btn-outline">取消</button>
+ *
+ * 尺寸：btn-sm / btn / btn-lg
+ * 颜色：btn-primary / btn-success / btn-error / btn-warning / btn-neutral / btn-ghost / btn-outline
+ *
+ * 💡 DOM 例子：
+ *   <button class="btn btn-primary">主操作</button>
+ *   <button class="btn btn-error">删除</button>
+ *   <button class="btn" disabled>禁用</button>
+ * ============================================================ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;            /* py-2 px-4 */
+  border-radius: 0.5rem;            /* rounded-lg */
+  font-weight: 500;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  cursor: pointer;
+  transition: all 0.15s ease-in-out;
+  border: 1px solid transparent;
+  white-space: nowrap;
+  user-select: none;
+}
+.btn:disabled,
+.btn.disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+/* 尺寸 */
+.btn-sm { padding: 0.25rem 0.75rem; font-size: 0.75rem; }
+.btn-lg { padding: 0.75rem 1.5rem;  font-size: 1rem; }
+
+/* 主色（蓝）— 默认推荐 */
+.btn-primary {
+  background-color: var(--blue-500);
+  color: white;
+}
+.btn-primary:hover:not(:disabled) { background-color: var(--blue-700); }
+
+/* 成功（绿） */
+.btn-success {
+  background-color: var(--green-500);
+  color: white;
+}
+.btn-success:hover:not(:disabled) { background-color: var(--green-700); }
+
+/* 错误（红） */
+.btn-error {
+  background-color: var(--red-500);
+  color: white;
+}
+.btn-error:hover:not(:disabled) { background-color: var(--red-700); }
+
+/* 警告（黄） */
+.btn-warning {
+  background-color: var(--yellow-500);
+  color: white;
+}
+.btn-warning:hover:not(:disabled) { background-color: var(--yellow-700); }
+
+/* 中性（灰） */
+.btn-neutral {
+  background-color: var(--gray-200);
+  color: var(--gray-900);
+}
+.btn-neutral:hover:not(:disabled) { background-color: var(--gray-300); }
+
+/* Ghost（透明，hover 才显形） */
+.btn-ghost {
+  background-color: transparent;
+  color: var(--gray-700);
+}
+.btn-ghost:hover:not(:disabled) { background-color: var(--gray-100); }
+
+/* Outline（白底加边框） */
+.btn-outline {
+  background-color: transparent;
+  border-color: var(--nova-border);
+  color: var(--nova-text);
+}
+.btn-outline:hover:not(:disabled) {
+  background-color: var(--gray-100);
+  border-color: var(--gray-300);
+}
+
+/* 块级按钮（占满父容器宽度） */
+.btn-block {
+  display: flex;
+  width: 100%;
+}
+
+/* 圆角按钮（图标用） */
+.btn-circle {
+  padding: 0.5rem;
+  border-radius: 9999px;
+  width: 2.5rem;
+  height: 2.5rem;
+}
+
+
+/* ============================================================
+ * 2. Card 卡片
+ * ============================================================
+ *
+ * 用法：
+ *   <div class="card">
+ *     <div class="card-body">
+ *       <h3 class="card-title">标题</h3>
+ *       <p>内容</p>
+ *       <div class="card-actions">
+ *         <button class="btn btn-primary">确定</button>
+ *       </div>
+ *     </div>
+ *   </div>
+ *
+ * 变体：card-bordered（带边框代替阴影）
+ * ============================================================ */
+.card {
+  background-color: var(--nova-surface);
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px 0 rgba(0,0,0,0.1), 0 1px 2px 0 rgba(0,0,0,0.06);
+  overflow: hidden;
+}
+.card-bordered {
+  box-shadow: none;
+  border: 1px solid var(--nova-border);
+}
+
+.card-body {
+  padding: 1rem;
+}
+.card-body-lg { padding: 1.5rem; }
+
+.card-title {
+  font-size: 1.125rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.card-subtitle {
+  font-size: 0.875rem;
+  color: var(--nova-text-muted);
+  margin-bottom: 0.75rem;
+}
+
+.card-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  justify-content: flex-end;
+}
+
+.card-footer {
+  padding: 0.75rem 1rem;
+  background-color: var(--nova-surface-2);
+  border-top: 1px solid var(--nova-border);
+}
+
+
+/* ============================================================
+ * 3. Badge 徽章
+ * ============================================================
+ *
+ * 用法：
+ *   <span class="badge badge-success">在线</span>
+ *   <span class="badge badge-error">故障</span>
+ *
+ * 颜色：badge-success / badge-error / badge-warning / badge-info / badge-neutral
+ * 尺寸：badge-sm / badge / badge-lg
+ * ============================================================ */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.125rem 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1rem;
+  background-color: var(--gray-100);
+  color: var(--gray-700);
+}
+.badge-sm { padding: 0.0625rem 0.375rem; font-size: 0.625rem; }
+.badge-lg { padding: 0.25rem 0.75rem;    font-size: 0.875rem; }
+
+.badge-success { background-color: var(--green-100); color: var(--green-700); }
+.badge-error   { background-color: var(--red-100);   color: var(--red-700);   }
+.badge-warning { background-color: var(--yellow-100); color: var(--yellow-700); }
+.badge-info    { background-color: var(--blue-100);  color: var(--blue-700);  }
+.badge-neutral { background-color: var(--gray-100);  color: var(--gray-700);  }
+
+
+/* ============================================================
+ * 4. Alert 提示框
+ * ============================================================
+ *
+ * 用法：
+ *   <div class="alert alert-info">提示内容</div>
+ *   <div class="alert alert-success">成功</div>
+ *
+ * 颜色：alert-info / alert-success / alert-warning / alert-error
+ * ============================================================ */
+.alert {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid;
+  font-size: 0.875rem;
+}
+.alert-icon {
+  flex-shrink: 0;
+  font-size: 1rem;
+  line-height: 1.25rem;
+}
+.alert-content {
+  flex: 1;
+}
+.alert-title {
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+}
+
+.alert-info    { background-color: var(--blue-100);   border-color: var(--blue-500);   color: var(--blue-700);   }
+.alert-success { background-color: var(--green-100);  border-color: var(--green-500);  color: var(--green-700);  }
+.alert-warning { background-color: var(--yellow-100); border-color: var(--yellow-500); color: var(--yellow-700); }
+.alert-error   { background-color: var(--red-100);    border-color: var(--red-500);    color: var(--red-700);    }
+
+
+/* ============================================================
+ * 5. Stat 数据展示
+ * ============================================================
+ *
+ * 用法：
+ *   <div class="stat">
+ *     <div class="stat-title">温度</div>
+ *     <div class="stat-value">24.5<span class="stat-unit">°C</span></div>
+ *     <div class="stat-desc">↑ 正常</div>
+ *   </div>
+ *
+ * 颜色变体：stat-success / stat-error / stat-warning / stat-info
+ * ============================================================ */
+.stat {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+}
+.stat-title {
+  font-size: 0.875rem;
+  color: var(--nova-text-muted);
+}
+.stat-value {
+  font-size: 1.875rem;
+  font-weight: 700;
+  margin-top: 0.25rem;
+  color: var(--nova-text);
+}
+.stat-unit {
+  font-size: 1rem;
+  color: var(--nova-text-muted);
+  font-weight: 400;
+  margin-left: 0.25rem;
+}
+.stat-desc {
+  font-size: 0.75rem;
+  margin-top: 0.5rem;
+  color: var(--nova-text-muted);
+}
+.stat-success .stat-value { color: var(--green-500); }
+.stat-error   .stat-value { color: var(--red-500);   }
+.stat-warning .stat-value { color: var(--yellow-500); }
+.stat-info    .stat-value { color: var(--blue-500);  }
+
+
+/* ============================================================
+ * 6. Progress 进度条
+ * ============================================================
+ *
+ * 用法：
+ *   <div class="progress">
+ *     <div class="progress-bar" style="width: 60%"></div>
+ *   </div>
+ *
+ * 颜色：progress-primary / progress-success / progress-warning / progress-error
+ * 尺寸：progress-sm / progress / progress-lg
+ * ============================================================ */
+.progress {
+  width: 100%;
+  height: 0.5rem;
+  background-color: var(--gray-200);
+  border-radius: 9999px;
+  overflow: hidden;
+}
+.progress-sm { height: 0.25rem; }
+.progress-lg { height: 0.75rem; }
+
+.progress-bar {
+  height: 100%;
+  border-radius: 9999px;
+  background-color: var(--blue-500);
+  transition: width 0.3s ease;
+}
+.progress-primary .progress-bar { background-color: var(--blue-500);  }
+.progress-success .progress-bar { background-color: var(--green-500); }
+.progress-warning .progress-bar { background-color: var(--yellow-500); }
+.progress-error   .progress-bar { background-color: var(--red-500);   }
+
+
+/* ============================================================
+ * 7. Sensor Card 传感器卡片（IoT 场景专用）
+ * ============================================================
+ *
+ * 用法：
+ *   <div class="sensor-card">
+ *     <div class="sensor-label">温度</div>
+ *     <div class="sensor-value">24.5<span class="sensor-unit">°C</span></div>
+ *     <div class="sensor-status sensor-status-normal">↑ 正常</div>
+ *   </div>
+ *
+ * 状态：sensor-status-normal / sensor-status-warning / sensor-status-error
+ * ============================================================ */
+.sensor-card {
+  background-color: var(--nova-surface);
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px 0 rgba(0,0,0,0.1), 0 1px 2px 0 rgba(0,0,0,0.06);
+  padding: 1rem;
+  text-align: center;
+}
+.sensor-card-bordered {
+  box-shadow: none;
+  border: 1px solid var(--nova-border);
+}
+
+.sensor-label {
+  font-size: 0.875rem;
+  color: var(--nova-text-muted);
+}
+.sensor-value {
+  font-size: 1.875rem;
+  font-weight: 700;
+  margin-top: 0.5rem;
+  color: var(--nova-text);
+}
+.sensor-unit {
+  font-size: 1rem;
+  color: var(--nova-text-muted);
+  font-weight: 400;
+  margin-left: 0.25rem;
+}
+.sensor-status {
+  font-size: 0.75rem;
+  margin-top: 0.5rem;
+}
+.sensor-status-normal  { color: var(--green-500); }
+.sensor-status-warning { color: var(--yellow-700); }
+.sensor-status-error   { color: var(--red-500); }
+
+
+/* ============================================================
+ * 8. Device Card 设备控制卡片（IoT 场景专用）
+ * ============================================================
+ *
+ * 用法：
+ *   <div class="device-card">
+ *     <div class="device-card-header">
+ *       <div class="device-card-title">💡 客厅灯</div>
+ *       <span class="device-card-status device-card-status-on"></span>
+ *     </div>
+ *     <div class="device-card-actions">
+ *       <button class="btn btn-success btn-sm btn-block">开</button>
+ *       <button class="btn btn-neutral btn-sm btn-block">关</button>
+ *     </div>
+ *   </div>
+ * ============================================================ */
+.device-card {
+  background-color: var(--nova-surface);
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px 0 rgba(0,0,0,0.1), 0 1px 2px 0 rgba(0,0,0,0.06);
+  padding: 1rem;
+}
+.device-card-bordered {
+  box-shadow: none;
+  border: 1px solid var(--nova-border);
+}
+.device-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+.device-card-title {
+  font-weight: 700;
+  font-size: 0.875rem;
+}
+.device-card-status {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background-color: var(--gray-300);
+}
+.device-card-status-on    { background-color: var(--green-500); }
+.device-card-status-off   { background-color: var(--gray-300);  }
+.device-card-status-error { background-color: var(--red-500);   }
+.device-card-status-warn  { background-color: var(--yellow-500); }
+.device-card-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+
+/* ============================================================
+ * 9. Status 状态点（圆形指示灯）
+ * ============================================================
+ *
+ * 用法：
+ *   <span class="status-dot status-online"></span>
+ *   <span class="status-dot status-error status-lg"></span>
+ *
+ * 状态：status-online / status-offline / status-error / status-warning
+ * 尺寸：status-sm / status / status-lg
+ * ============================================================ */
+.status-dot {
+  display: inline-block;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background-color: var(--gray-300);
+  vertical-align: middle;
+}
+.status-sm { width: 0.375rem; height: 0.375rem; }
+.status-lg { width: 0.75rem;  height: 0.75rem;  }
+
+.status-online  { background-color: var(--green-500); }
+.status-offline { background-color: var(--gray-300);  }
+.status-error   { background-color: var(--red-500);   }
+.status-warning { background-color: var(--yellow-500); }
+
+/* 带光晕的脉冲状态点（在线/活动指示） */
+.status-pulse {
+  position: relative;
+}
+.status-pulse::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background-color: inherit;
+  opacity: 0.4;
+  animation: nova-pulse 1.5s ease-out infinite;
+}
+@keyframes nova-pulse {
+  0%   { transform: scale(1);   opacity: 0.4; }
+  100% { transform: scale(2.5); opacity: 0;   }
+}
+
+
+/* ============================================================
+ * 10. Switch 开关（IoT 设备控制专用）
+ * ============================================================
+ *
+ * 用法（需要 JS 配合）：
+ *   <label class="switch">
+ *     <input type="checkbox" id="sw1">
+ *     <span class="switch-slider"></span>
+ *   </label>
+ *
+ * 颜色变体：switch-success / switch-primary（默认绿，可改蓝）
+ * ============================================================ */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 2.75rem;          /* 44px */
+  height: 1.5rem;          /* 24px */
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+  position: absolute;
+}
+.switch-slider {
+  position: absolute;
+  inset: 0;
+  background-color: var(--gray-300);
+  border-radius: 9999px;
+  transition: background-color 0.2s ease;
+}
+.switch-slider::before {
+  content: "";
+  position: absolute;
+  height: 1.125rem;        /* 18px */
+  width: 1.125rem;
+  left: 0.1875rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: white;
+  border-radius: 50%;
+  transition: transform 0.2s ease;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+}
+.switch input:checked + .switch-slider {
+  background-color: var(--green-500);
+}
+.switch input:checked + .switch-slider::before {
+  transform: translateX(1.25rem) translateY(-50%);
+}
+.switch-primary input:checked + .switch-slider {
+  background-color: var(--blue-500);
+}
+.switch-error input:checked + .switch-slider {
+  background-color: var(--red-500);
+}
+.switch:has(input:disabled) {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+
+/* ============================================================
+ * 11. Modal 弹窗
+ * ============================================================
+ *
+ * 用法（需要 JS 配合切换 .modal-open）：
+ *   <div id="m1" class="modal-backdrop">
+ *     <div class="modal">
+ *       <h3 class="modal-title">标题</h3>
+ *       <p>弹窗内容</p>
+ *       <div class="modal-actions">
+ *         <button class="btn btn-neutral" onclick="close()">取消</button>
+ *         <button class="btn btn-primary" onclick="close()">确认</button>
+ *       </div>
+ *     </div>
+ *   </div>
+ *
+ * JS 示例：
+ *   function open(id)  { document.getElementById(id).classList.add('modal-open') }
+ *   function close(id) { document.getElementById(id).classList.remove('modal-open') }
+ * ============================================================ */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 50;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+.modal-backdrop.modal-open {
+  display: flex;
+}
+
+.modal {
+  background-color: var(--nova-surface);
+  border-radius: 0.5rem;
+  box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
+  max-width: 32rem;
+  width: 100%;
+  padding: 1.5rem;
+  animation: nova-modal-in 0.2s ease-out;
+}
+@keyframes nova-modal-in {
+  from { opacity: 0; transform: scale(0.95) translateY(-10px); }
+  to   { opacity: 1; transform: scale(1)    translateY(0);     }
+}
+
+.modal-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+.modal-body {
+  font-size: 0.875rem;
+  color: var(--nova-text-muted);
+  margin-bottom: 1.5rem;
+}
+.modal-actions {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+}
+
+
+/* ============================================================
+ * 12. Loading 加载中
+ * ============================================================
+ *
+ * 用法：
+ *   <span class="loading"></span>
+ *   <span class="loading loading-lg loading-primary"></span>
+ *
+ * 颜色：loading-primary / loading-success / loading-error / loading-warning
+ * 尺寸：loading-sm / loading / loading-lg
+ * ============================================================ */
+.loading {
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid var(--gray-200);
+  border-top-color: var(--blue-500);
+  border-radius: 50%;
+  animation: nova-spin 0.8s linear infinite;
+  vertical-align: middle;
+}
+.loading-sm { width: 0.75rem; height: 0.75rem; border-width: 2px; }
+.loading-lg { width: 2rem;    height: 2rem;    border-width: 3px; }
+
+.loading-primary { border-top-color: var(--blue-500);  }
+.loading-success { border-top-color: var(--green-500); }
+.loading-error   { border-top-color: var(--red-500);   }
+.loading-warning { border-top-color: var(--yellow-500); }
+.loading-white   { border-color: rgba(255,255,255,0.3); border-top-color: white; }
+
+@keyframes nova-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* 全屏加载 */
+.loading-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(255, 255, 255, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+.dark .loading-overlay { background-color: rgba(15, 23, 42, 0.8); }
+
+
+/* ============================================================
+ * 13. Navbar 顶栏
+ * ============================================================
+ *
+ * 用法：
+ *   <div class="navbar">
+ *     <div class="navbar-brand">🌡️ 智能家居</div>
+ *     <div class="navbar-actions">
+ *       <span class="status-dot status-online"></span>
+ *       <span>在线</span>
+ *     </div>
+ *   </div>
+ *
+ * 变体：navbar-dark（深色背景）
+ * ============================================================ */
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  background-color: var(--nova-surface);
+  border-bottom: 1px solid var(--nova-border);
+}
+.navbar-brand {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--nova-text);
+}
+.navbar-actions {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+.navbar-dark {
+  background-color: var(--gray-800);
+  border-bottom-color: var(--gray-800);
+  color: white;
+}
+.navbar-dark .navbar-brand { color: white; }
+
+
+/* ============================================================
+ * 14. Drawer 侧边栏布局
+ * ============================================================
+ *
+ * 用法：
+ *   <div class="drawer">
+ *     <aside class="drawer-side">
+ *       <div class="menu">
+ *         <div class="menu-item active">🏠 首页</div>
+ *         <div class="menu-item">📊 仪表盘</div>
+ *       </div>
+ *     </aside>
+ *     <main class="drawer-content">
+ *       主内容
+ *     </main>
+ *   </div>
+ * ============================================================ */
+.drawer {
+  display: flex;
+  min-height: 100vh;
+}
+.drawer-side {
+  width: 16rem;
+  background-color: var(--nova-surface);
+  border-right: 1px solid var(--nova-border);
+  padding: 1rem;
+  flex-shrink: 0;
+}
+.drawer-content {
+  flex: 1;
+  padding: 1rem;
+  background-color: var(--nova-bg);
+  min-width: 0;
+}
+
+.menu-title {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--nova-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.5rem 0.75rem;
+  margin-top: 0.5rem;
+}
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.5rem;
+  color: var(--nova-text);
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: background-color 0.15s;
+  user-select: none;
+}
+.menu-item:hover {
+  background-color: var(--gray-100);
+}
+.menu-item.active {
+  background-color: var(--blue-100);
+  color: var(--blue-700);
+  font-weight: 500;
+}
+
+
+/* ============================================================
+ * 15. Tabs 标签页
+ * ============================================================
+ *
+ * 用法（需要 JS 切换 .active）：
+ *   <div class="tabs">
+ *     <div class="tab active" onclick="activate(this)">实时</div>
+ *     <div class="tab" onclick="activate(this)">历史</div>
+ *   </div>
+ *   <div class="tab-content">
+ *     当前选中 tab 的内容
+ *   </div>
+ *
+ * 颜色变体：tabs-boxed（带背景容器）
+ * ============================================================ */
+.tabs {
+  display: flex;
+  gap: 0.25rem;
+  border-bottom: 1px solid var(--nova-border);
+}
+.tab {
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  color: var(--nova-text-muted);
+  font-size: 0.875rem;
+  transition: all 0.15s;
+  user-select: none;
+}
+.tab:hover {
+  color: var(--nova-text);
+}
+.tab.active {
+  color: var(--blue-500);
+  border-bottom-color: var(--blue-500);
+  font-weight: 500;
+}
+
+/* Boxed 风格：带背景容器 */
+.tabs-boxed {
+  background-color: var(--gray-100);
+  border-bottom: none;
+  border-radius: 0.5rem;
+  padding: 0.25rem;
+  gap: 0.25rem;
+  width: fit-content;
+}
+.tabs-boxed .tab {
+  border-bottom: none;
+  border-radius: 0.375rem;
+}
+.tabs-boxed .tab.active {
+  background-color: var(--nova-surface);
+  color: var(--nova-text);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+
+
+/* ============================================================
+ * 16. Toast 通知（短时弹出消息）
+ * ============================================================
+ *
+ * 用法（需要 JS）：
+ *   <div id="toast-container" class="toast-container"></div>
+ *
+ *   function showToast(msg, type = 'info') {
+ *     const t = document.createElement('div')
+ *     t.className = 'toast toast-' + type
+ *     t.textContent = msg
+ *     document.getElementById('toast-container').appendChild(t)
+ *     setTimeout(() => t.remove(), 3000)
+ *   }
+ * ============================================================ */
+.toast-container {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  pointer-events: none;
+}
+.toast {
+  background-color: var(--nova-surface);
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+  padding: 0.75rem 1rem;
+  border-left: 4px solid var(--blue-500);
+  min-width: 16rem;
+  max-width: 24rem;
+  font-size: 0.875rem;
+  color: var(--nova-text);
+  animation: nova-toast-in 0.3s ease;
+  pointer-events: auto;
+}
+.toast-info    { border-left-color: var(--blue-500);  }
+.toast-success { border-left-color: var(--green-500); }
+.toast-error   { border-left-color: var(--red-500);   }
+.toast-warning { border-left-color: var(--yellow-500); }
+@keyframes nova-toast-in {
+  from { transform: translateX(120%); opacity: 0; }
+  to   { transform: translateX(0);    opacity: 1; }
+}
+
+
+/* ============================================================
+ * 17. Avatar 头像
+ * ============================================================
+ *
+ * 用法：
+ *   <div class="avatar">ZC</div>
+ *   <div class="avatar avatar-lg" style="background-color: var(--blue-500); color: white;">Z</div>
+ *   <img class="avatar" src="..." alt="">
+ *
+ * 尺寸：avatar-sm / avatar / avatar-lg
+ * ============================================================ */
+.avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  background-color: var(--gray-300);
+  color: var(--gray-700);
+  font-weight: 500;
+  font-size: 0.875rem;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.avatar-sm { width: 1.75rem; height: 1.75rem; font-size: 0.75rem; }
+.avatar-lg { width: 4rem;    height: 4rem;    font-size: 1.25rem; }
+
+.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+
+/* ============================================================
+ * 18. Breadcrumb 面包屑
+ * ============================================================
+ *
+ * 用法：
+ *   <div class="breadcrumb">
+ *     <span class="breadcrumb-item">首页</span>
+ *     <span class="breadcrumb-separator">/</span>
+ *     <span class="breadcrumb-item">设备</span>
+ *     <span class="breadcrumb-separator">/</span>
+ *     <span class="breadcrumb-item active">客厅灯</span>
+ *   </div>
+ * ============================================================ */
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  color: var(--nova-text-muted);
+}
+.breadcrumb-item {
+  cursor: pointer;
+  transition: color 0.15s;
+}
+.breadcrumb-item:hover {
+  color: var(--blue-500);
+}
+.breadcrumb-item.active {
+  color: var(--nova-text);
+  cursor: default;
+}
+.breadcrumb-separator {
+  color: var(--gray-400);
+  user-select: none;
+}
+
+
+/* ============================================================
+ * 19. Divider 分割线
+ * ============================================================
+ *
+ * 用法：
+ *   <hr class="divider">
+ *   <div class="divider divider-text">或</div>
+ * ============================================================ */
+.divider {
+  border: none;
+  height: 1px;
+  background-color: var(--nova-border);
+  margin: 1rem 0;
+}
+.divider-vertical {
+  width: 1px;
+  height: auto;
+  align-self: stretch;
+  margin: 0 0.5rem;
+}
+.divider-text {
+  display: flex;
+  align-items: center;
+  color: var(--nova-text-muted);
+  font-size: 0.875rem;
+  margin: 1rem 0;
+}
+.divider-text::before,
+.divider-text::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background-color: var(--nova-border);
+}
+.divider-text span {
+  padding: 0 0.75rem;
+}
+
+
+/* ============================================================
+ * 20. Input Group 输入框组合
+ * ============================================================
+ *
+ * 用法：
+ *   <div class="input-group">
+ *     <span class="input-group-addon">🔍</span>
+ *     <input type="text" placeholder="搜索设备...">
+ *     <button class="btn btn-primary">搜索</button>
+ *   </div>
+ * ============================================================ */
+.input-group {
+  display: flex;
+  align-items: stretch;
+  border: 1px solid var(--nova-border);
+  border-radius: 0.5rem;
+  overflow: hidden;
+  background-color: var(--nova-surface);
+  transition: border-color 0.15s;
+}
+.input-group:focus-within {
+  border-color: var(--blue-500);
+}
+.input-group input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  background: transparent;
+  padding: 0.5rem 0.75rem;
+  font-size: 1rem;
+  color: var(--nova-text);
+  outline: none;
+}
+.input-group-addon {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 0.75rem;
+  background-color: var(--gray-100);
+  color: var(--nova-text-muted);
+  font-size: 0.875rem;
+  white-space: nowrap;
+}
+.input-group .btn {
+  border-radius: 0;
+  margin: 0;
+}
+
+
+/* ============================================================
+ * 暗色模式适配
+ * ============================================================
+ * 大部分组件用了 var(--nova-*) 语义变量，暗色模式下自动适配。
+ * 固定颜色（按钮 hover 阴影等）保持一致。
+ * ============================================================ */
+.dark .modal-backdrop { background-color: rgba(0, 0, 0, 0.7); }
+.dark .card,
+.dark .sensor-card,
+.dark .device-card { box-shadow: 0 0 0 1px rgba(255,255,255,0.05); }
+.dark .toast,
+.dark .modal { box-shadow: 0 10px 15px -3px rgba(0,0,0,0.5); }
+/* ============== nova-ui-elements 状态指示 ============== */
+.nova-ce { display: inline-block; }
+.nova-ce-input-mask { position: relative; }
+.nova-ce-input-mask input { padding-right: 28px; }
+.nova-input-mask-status {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1;
+  pointer-events: none;
+  width: 16px;
+  text-align: center;
+}
+.nova-input-mask-status[data-state="pending"] { color: #6b7280; }
+.nova-input-mask-status[data-state="ok"]      { color: #10b981; }
+.nova-input-mask-status[data-state="err"]     { color: #ef4444; }
+.nova-input-mask-status:empty { display: none; }
+
+/* ============== nova-tabs ============== */
+.nova-ce-tabs { display: block; }
+.nova-ce-tabs [slot="tab"] {
+  background: transparent;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  padding: 8px 16px;
+  font-size: 14px;
+  color: var(--nova-text, #6b7280);
+  cursor: pointer;
+  font-family: inherit;
+  transition: color 0.15s, border-color 0.15s;
+}
+.nova-ce-tabs [slot="tab"]:hover { color: var(--nova-primary, #3b82f6); }
+.nova-ce-tabs [slot="tab"]:focus { outline: 2px solid var(--nova-primary, #3b82f6); outline-offset: -2px; }
+.nova-ce-tabs .nova-tab-active {
+  color: var(--nova-primary, #3b82f6);
+  border-bottom-color: var(--nova-primary, #3b82f6);
+  font-weight: 600;
+}
+.nova-ce-tabs [slot="panel"] { padding: 16px 0; }
+
+/* ============== nova-tag-input ============== */
+.nova-ce-tag-input { display: block; }
+.nova-tag-input-box {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 6px;
+  min-height: 38px; padding: 4px 8px;
+  border: 1px solid var(--nova-border, #d1d5db); border-radius: 6px;
+  background: #fff; transition: border-color 0.15s, box-shadow 0.15s;
+}
+.nova-tag-input-box:focus-within {
+  border-color: var(--nova-primary, #3b82f6);
+  box-shadow: 0 0 0 3px rgba(59,130,246,0.15);
+}
+.nova-tag-list { display: contents; }
+.nova-tag-chip {
+  display: inline-flex; align-items: center; gap: 4px;
+  background: var(--nova-primary-light, #dbeafe);
+  color: var(--nova-primary, #1e40af);
+  font-size: 13px; padding: 2px 4px 2px 8px; border-radius: 4px;
+}
+.nova-tag-chip-x {
+  background: transparent; border: 0; cursor: pointer;
+  color: inherit; opacity: 0.6; font-size: 16px; line-height: 1;
+  padding: 0 4px; border-radius: 3px;
+}
+.nova-tag-chip-x:hover { opacity: 1; background: rgba(0,0,0,0.08); }
+.nova-tag-input-field {
+  flex: 1; min-width: 100px; border: 0; outline: none;
+  font-size: 14px; padding: 4px; background: transparent;
+  font-family: inherit;
+}
+.dark .nova-tag-input-box { background: #1f2937; border-color: #374151; }
+.dark .nova-tag-chip { background: #1e3a8a; color: #93c5fd; }
+
+/* ============== nova-color-picker ============== */
+.nova-ce-color-picker { display: inline-flex; gap: 12px; align-items: stretch; padding: 8px; border: 1px solid var(--nova-border, #e5e7eb); border-radius: 8px; }
+.nova-color-preview {
+  width: 56px; height: 56px; border-radius: 6px;
+  border: 1px solid rgba(0,0,0,0.1); flex-shrink: 0;
+}
+.nova-color-controls { display: flex; flex-direction: column; gap: 4px; min-width: 180px; }
+.nova-color-row { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--nova-text, #6b7280); }
+.nova-color-row input[type=range] { flex: 1; }
+.nova-color-hex {
+  font-family: monospace; font-size: 13px;
+  padding: 4px 8px; border: 1px solid var(--nova-border, #d1d5db);
+  border-radius: 4px; outline: none;
+}
+.nova-color-hex:focus { border-color: var(--nova-primary, #3b82f6); }
+
+/* ============== nova-thermostat ============== */
+.nova-ce-thermostat {
+  display: flex; flex-direction: column; align-items: center; gap: 12px;
+  padding: 20px; min-width: 220px;
+  background: linear-gradient(180deg, #f9fafb 0%, #f3f4f6 100%);
+  border-radius: 12px; border: 1px solid var(--nova-border, #e5e7eb);
+}
+.nova-thermostat-readout { display: flex; align-items: baseline; gap: 4px; }
+.nova-thermostat-value { font-size: 48px; font-weight: 700; color: #111; line-height: 1; }
+.nova-thermostat-unit { font-size: 18px; color: #6b7280; }
+.nova-thermostat-mode { display: flex; gap: 6px; }
+.nova-thermostat-mode button {
+  width: 36px; height: 36px; border: 1px solid var(--nova-border, #d1d5db);
+  background: #fff; border-radius: 50%; cursor: pointer;
+  font-size: 16px; color: #6b7280; transition: all 0.15s;
+}
+.nova-thermostat-mode button:hover { background: #f3f4f6; }
+.nova-thermostat-mode-active { background: var(--nova-primary, #3b82f6) !important; color: #fff !important; border-color: var(--nova-primary, #3b82f6) !important; }
+.nova-thermostat-slider { width: 100%; }
+.nova-thermostat-status { display: flex; align-items: center; gap: 6px; font-size: 13px; color: #6b7280; }
+.nova-thermostat-dot { width: 8px; height: 8px; border-radius: 50%; background: #6b7280; transition: background 0.2s; }
+.dark .nova-ce-thermostat { background: linear-gradient(180deg, #1f2937 0%, #111827 100%); border-color: #374151; }
+.dark .nova-thermostat-value { color: #f3f4f6; }
+.dark .nova-thermostat-mode button { background: #1f2937; border-color: #374151; color: #9ca3af; }
