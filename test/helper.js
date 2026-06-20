@@ -9,7 +9,7 @@ const SOURCE = fs.readFileSync(
   'utf8'
 )
 const ELEMENTS_SOURCE = fs.readFileSync(
-  path.join(__dirname, '..', 'nova-ui-elements.js'),
+  path.join(__dirname, '..', 'src', 'nova-ui-elements.js'),
   'utf8'
 )
 
