@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>Nova UI · ‹nova-tag-input› demo</title>
+  <link rel="stylesheet" href="../src/nova-style.css">
+  <link rel="stylesheet" href="../src/nova-ui.css">
+  <script src="../src/novajs.min.js"></script>
+  <script src="../src/nova-ui-elements.min.js"></script>
+</head>
+<body class="bg-gray-50 min-h-screen p-4">
+  <div class="max-w-2xl mx-auto">
+    <h1 class="text-2xl font-bold mb-1">‹nova-tag-input›</h1>
+    <p class="text-sm text-gray-500 mb-6">输入设备标签 · 回车添加 · Backspace 删除 · × 移除指定</p>
+
+    <div class="card mb-4">
+      <div class="card-body">
+        <label class="block text-sm font-medium mb-2">设备标签</label>
+        <nova-tag-input model="deviceTags" placeholder="输入后回车添加"></nova-tag-input>
+        <p class="text-xs text-gray-500 mt-2">标签数：{{ deviceTags.length }}</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-body">
+        <h2 class="card-title">当前数据</h2>
+        <pre class="bg-gray-50 p-3 rounded text-xs">{{ JSON.stringify(deviceTags) }}</pre>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    nova({ data: { deviceTags: ['客厅', '主卧'] } })
+  </script>
+</body>
+</html>

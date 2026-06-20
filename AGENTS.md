@@ -70,15 +70,19 @@ nova-ui/
 
 两种可以混用。
 
-### 2. 5 个动态组件
+### 2. 9 个动态组件
 
 | 元素 | 用途 | 文件 |
 |---|---|---|
 | `<nova-switch>` | 开关 | `nova-ui-elements.js` |
 | `<nova-slider>` | 滑块（带 debounce） | 同上 |
 | `<nova-input-mask>` | 输入掩码（手机号/身份证等）| 同上 |
-| `<nova-knob>` | 旋钮 | 同上 |
+| `<nova-knob>` | 旋钮（支持 `format` 属性） | 同上 |
 | `<nova-modal>` | 弹窗（带 slot） | 同上 |
+| `<nova-tabs>` | 标签页（键盘 ← → 导航） | 同上 |
+| `<nova-tag-input>` | 设备标签输入 | 同上 |
+| `<nova-color-picker>` | HSV 三轴调色 | 同上 |
+| `<nova-thermostat>` | 温度控制组合 | 同上 |
 
 每个组件都有自己的文档页：`docs/components/dynamic/nova-XXX.md`。
 

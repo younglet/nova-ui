@@ -1076,3 +1076,99 @@
 .nova-input-mask-status[data-state="ok"]      { color: #10b981; }
 .nova-input-mask-status[data-state="err"]     { color: #ef4444; }
 .nova-input-mask-status:empty { display: none; }
+
+/* ============== nova-tabs ============== */
+.nova-ce-tabs { display: block; }
+.nova-ce-tabs [slot="tab"] {
+  background: transparent;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  padding: 8px 16px;
+  font-size: 14px;
+  color: var(--nova-text, #6b7280);
+  cursor: pointer;
+  font-family: inherit;
+  transition: color 0.15s, border-color 0.15s;
+}
+.nova-ce-tabs [slot="tab"]:hover { color: var(--nova-primary, #3b82f6); }
+.nova-ce-tabs [slot="tab"]:focus { outline: 2px solid var(--nova-primary, #3b82f6); outline-offset: -2px; }
+.nova-ce-tabs .nova-tab-active {
+  color: var(--nova-primary, #3b82f6);
+  border-bottom-color: var(--nova-primary, #3b82f6);
+  font-weight: 600;
+}
+.nova-ce-tabs [slot="panel"] { padding: 16px 0; }
+
+/* ============== nova-tag-input ============== */
+.nova-ce-tag-input { display: block; }
+.nova-tag-input-box {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 6px;
+  min-height: 38px; padding: 4px 8px;
+  border: 1px solid var(--nova-border, #d1d5db); border-radius: 6px;
+  background: #fff; transition: border-color 0.15s, box-shadow 0.15s;
+}
+.nova-tag-input-box:focus-within {
+  border-color: var(--nova-primary, #3b82f6);
+  box-shadow: 0 0 0 3px rgba(59,130,246,0.15);
+}
+.nova-tag-list { display: contents; }
+.nova-tag-chip {
+  display: inline-flex; align-items: center; gap: 4px;
+  background: var(--nova-primary-light, #dbeafe);
+  color: var(--nova-primary, #1e40af);
+  font-size: 13px; padding: 2px 4px 2px 8px; border-radius: 4px;
+}
+.nova-tag-chip-x {
+  background: transparent; border: 0; cursor: pointer;
+  color: inherit; opacity: 0.6; font-size: 16px; line-height: 1;
+  padding: 0 4px; border-radius: 3px;
+}
+.nova-tag-chip-x:hover { opacity: 1; background: rgba(0,0,0,0.08); }
+.nova-tag-input-field {
+  flex: 1; min-width: 100px; border: 0; outline: none;
+  font-size: 14px; padding: 4px; background: transparent;
+  font-family: inherit;
+}
+.dark .nova-tag-input-box { background: #1f2937; border-color: #374151; }
+.dark .nova-tag-chip { background: #1e3a8a; color: #93c5fd; }
+
+/* ============== nova-color-picker ============== */
+.nova-ce-color-picker { display: inline-flex; gap: 12px; align-items: stretch; padding: 8px; border: 1px solid var(--nova-border, #e5e7eb); border-radius: 8px; }
+.nova-color-preview {
+  width: 56px; height: 56px; border-radius: 6px;
+  border: 1px solid rgba(0,0,0,0.1); flex-shrink: 0;
+}
+.nova-color-controls { display: flex; flex-direction: column; gap: 4px; min-width: 180px; }
+.nova-color-row { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--nova-text, #6b7280); }
+.nova-color-row input[type=range] { flex: 1; }
+.nova-color-hex {
+  font-family: monospace; font-size: 13px;
+  padding: 4px 8px; border: 1px solid var(--nova-border, #d1d5db);
+  border-radius: 4px; outline: none;
+}
+.nova-color-hex:focus { border-color: var(--nova-primary, #3b82f6); }
+
+/* ============== nova-thermostat ============== */
+.nova-ce-thermostat {
+  display: flex; flex-direction: column; align-items: center; gap: 12px;
+  padding: 20px; min-width: 220px;
+  background: linear-gradient(180deg, #f9fafb 0%, #f3f4f6 100%);
+  border-radius: 12px; border: 1px solid var(--nova-border, #e5e7eb);
+}
+.nova-thermostat-readout { display: flex; align-items: baseline; gap: 4px; }
+.nova-thermostat-value { font-size: 48px; font-weight: 700; color: #111; line-height: 1; }
+.nova-thermostat-unit { font-size: 18px; color: #6b7280; }
+.nova-thermostat-mode { display: flex; gap: 6px; }
+.nova-thermostat-mode button {
+  width: 36px; height: 36px; border: 1px solid var(--nova-border, #d1d5db);
+  background: #fff; border-radius: 50%; cursor: pointer;
+  font-size: 16px; color: #6b7280; transition: all 0.15s;
+}
+.nova-thermostat-mode button:hover { background: #f3f4f6; }
+.nova-thermostat-mode-active { background: var(--nova-primary, #3b82f6) !important; color: #fff !important; border-color: var(--nova-primary, #3b82f6) !important; }
+.nova-thermostat-slider { width: 100%; }
+.nova-thermostat-status { display: flex; align-items: center; gap: 6px; font-size: 13px; color: #6b7280; }
+.nova-thermostat-dot { width: 8px; height: 8px; border-radius: 50%; background: #6b7280; transition: background 0.2s; }
+.dark .nova-ce-thermostat { background: linear-gradient(180deg, #1f2937 0%, #111827 100%); border-color: #374151; }
+.dark .nova-thermostat-value { color: #f3f4f6; }
+.dark .nova-thermostat-mode button { background: #1f2937; border-color: #374151; color: #9ca3af; }

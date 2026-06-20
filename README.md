@@ -7,7 +7,7 @@
 ## ✨ 特点
 
 - 🧩 **20 个静态组件** — `class="btn btn-primary"` 直接用，复制粘贴即可
-- ⚡ **5 个动态组件** — `<nova-switch model="power">` 响应式，PrimeVue / Element 风格
+- ⚡ **9 个动态组件** — `<nova-switch model="power">` 响应式，PrimeVue / Element 风格
 - 🎨 **基于 Nova Style** — 自动复用 nova-style.css 的颜色 token 和暗色模式
 - 📦 **零依赖** — 纯 CSS + 原生 Custom Elements，约 23KB CSS + 11KB JS
 - 🎯 **IoT 场景优化** — 内置 `sensor-card` / `device-card` / `switch` / `status-dot` 等

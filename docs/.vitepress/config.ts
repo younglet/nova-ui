@@ -89,7 +89,11 @@ export default defineConfig({
             { text: '‹nova-slider›', link: '/components/dynamic/nova-slider' },
             { text: '‹nova-input-mask›', link: '/components/dynamic/nova-input-mask' },
             { text: '‹nova-knob›', link: '/components/dynamic/nova-knob' },
-            { text: '‹nova-modal›', link: '/components/dynamic/nova-modal' }
+            { text: '‹nova-modal›', link: '/components/dynamic/nova-modal' },
+            { text: '‹nova-tabs›', link: '/components/dynamic/nova-tabs' },
+            { text: '‹nova-tag-input›', link: '/components/dynamic/nova-tag-input' },
+            { text: '‹nova-color-picker›', link: '/components/dynamic/nova-color-picker' },
+            { text: '‹nova-thermostat›', link: '/components/dynamic/nova-thermostat' }
           ]
         }
       ]

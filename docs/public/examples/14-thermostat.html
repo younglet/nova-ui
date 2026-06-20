@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>Nova UI · ‹nova-thermostat› demo</title>
+  <link rel="stylesheet" href="../src/nova-style.css">
+  <link rel="stylesheet" href="../src/nova-ui.css">
+  <script src="../src/novajs.min.js"></script>
+  <script src="../src/nova-ui-elements.min.js"></script>
+</head>
+<body class="bg-gray-50 min-h-screen p-4">
+  <div class="max-w-md mx-auto">
+    <h1 class="text-2xl font-bold mb-1">‹nova-thermostat›</h1>
+    <p class="text-sm text-gray-500 mb-6">温度控制组合 · 滑块 + 模式 + 状态点</p>
+
+    <nova-thermostat model="temp" mode-model="mode" min="16" max="30" step="0.5" unit="°C"></nova-thermostat>
+
+    <div class="card mt-6">
+      <div class="card-body">
+        <h2 class="card-title">当前数据</h2>
+        <pre class="bg-gray-50 p-3 rounded text-xs">温度：{{ temp }} °C
+模式：{{ mode }}</pre>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    nova({ data: { temp: 22, mode: 'cool' } })
+  </script>
+</body>
+</html>

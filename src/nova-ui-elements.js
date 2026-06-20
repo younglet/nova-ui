@@ -505,8 +505,364 @@
 
   if (!customElements.get('nova-modal')) customElements.define('nova-modal', NovaModal)
 
+  // ============== <nova-tabs> ==============
+  // 用法：
+  //   <nova-tabs model="active">
+  //     <button slot="tab" data-tab="a">A</button>
+  //     <button slot="tab" data-tab="b">B</button>
+  //     <div slot="panel" data-tab="a">panel A</div>
+  //     <div slot="panel" data-tab="b">panel B</div>
+  //   </nova-tabs>
+  var NovaTabs = function () {
+    var cls = function () { var el = Reflect.construct(HTMLElement, [], cls); el._initialized = false; return el }
+    cls.prototype = Object.create(HTMLElement.prototype)
+    cls.prototype.constructor = cls
+
+    cls.prototype.connectedCallback = function () {
+      if (this._initialized) return
+      this._initialized = true
+      this.className = 'nova-ce nova-ce-tabs'
+      var model = this.getAttribute('model') || 'tab'
+      var self = this
+
+      // 初始化：model 默认为第一个 tab
+      onNovaReady(function (data) {
+        var tabs = self.querySelectorAll('[slot="tab"]')
+        var panels = self.querySelectorAll('[slot="panel"]')
+        if (!data[model]) {
+          var first = tabs[0]
+          if (first) data[model] = first.getAttribute('data-tab')
+        }
+        self._render(tabs, panels, data[model])
+        data.$watch && data.$watch(model, function (active) {
+          self._render(tabs, panels, active)
+          self.dispatchEvent(new CustomEvent('change', { bubbles: true, detail: { value: active } }))
+        })
+      })
+
+      this.addEventListener('click', function (e) {
+        var t = e.target.closest('[slot="tab"]')
+        if (!t) return
+        var key = t.getAttribute('data-tab')
+        if (global.nova && global.nova._data) global.nova._data[model] = key
+      })
+
+      // 键盘：左/右键
+      this.addEventListener('keydown', function (e) {
+        if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return
+        var tabs = self.querySelectorAll('[slot="tab"]')
+        var cur = global.nova && global.nova._data ? global.nova._data[model] : null
+        var idx = -1
+        for (var i = 0; i < tabs.length; i++) {
+          if (tabs[i].getAttribute('data-tab') === cur) { idx = i; break }
+        }
+        if (idx < 0) idx = 0
+        var next = e.key === 'ArrowRight' ? (idx + 1) % tabs.length : (idx - 1 + tabs.length) % tabs.length
+        var newKey = tabs[next].getAttribute('data-tab')
+        if (global.nova && global.nova._data) global.nova._data[model] = newKey
+        tabs[next].focus()
+        e.preventDefault()
+      })
+    }
+
+    cls.prototype._render = function (tabs, panels, active) {
+      for (var i = 0; i < tabs.length; i++) {
+        var t = tabs[i]
+        var on = t.getAttribute('data-tab') === active
+        t.classList.toggle('nova-tab-active', on)
+        t.setAttribute('aria-selected', on ? 'true' : 'false')
+        t.setAttribute('tabindex', on ? '0' : '-1')
+      }
+      for (var j = 0; j < panels.length; j++) {
+        var p = panels[j]
+        p.style.display = p.getAttribute('data-tab') === active ? '' : 'none'
+      }
+    }
+
+    return cls
+  }()
+
+  if (!customElements.get('nova-tabs')) customElements.define('nova-tabs', NovaTabs)
+
+  // ============== <nova-tag-input> ==============
+  // model: 字符串数组（或 CSV）；回车添加，Backspace 删除最后一枚
+  var NovaTagInput = function () {
+    var cls = function () { var el = Reflect.construct(HTMLElement, [], cls); el._initialized = false; return el }
+    cls.prototype = Object.create(HTMLElement.prototype)
+    cls.prototype.constructor = cls
+
+    cls.prototype.connectedCallback = function () {
+      if (this._initialized) return
+      this._initialized = true
+      var model = this.getAttribute('model') || 'tags'
+      var placeholder = this.getAttribute('placeholder') || '输入后回车'
+      var separator = this.getAttribute('separator') || ','
+      var self = this
+      this.className = 'nova-ce nova-ce-tag-input'
+      this.innerHTML = '<div class="nova-tag-input-box">' +
+        '<div class="nova-tag-list"></div>' +
+        '<input class="nova-tag-input-field" placeholder="' + placeholder + '">' +
+        '</div>'
+      this._list = this.querySelector('.nova-tag-list')
+      this._input = this.querySelector('.nova-tag-input-field')
+
+      this._input.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === separator) {
+          e.preventDefault()
+          var v = self._input.value.trim()
+          if (v) {
+            var arr = self._readModel()
+            arr.push(v)
+            self._writeModel(arr)
+            self._input.value = ''
+          }
+        } else if (e.key === 'Backspace' && self._input.value === '') {
+          var a = self._readModel()
+          if (a.length) { a.pop(); self._writeModel(a) }
+          e.preventDefault()
+        }
+      })
+
+      onNovaReady(function (data) {
+        if (data[model] == null) data[model] = []
+        self._render(data[model])
+        data.$watch && data.$watch(model, function (arr) { self._render(arr || []) })
+      })
+    }
+
+    cls.prototype._readModel = function () {
+      var model = this.getAttribute('model') || 'tags'
+      var v = (global.nova && global.nova._data) ? global.nova._data[model] : []
+      if (typeof v === 'string') return v ? v.split(',').map(function (s) { return s.trim() }).filter(Boolean) : []
+      return Array.isArray(v) ? v.slice() : []
+    }
+
+    cls.prototype._writeModel = function (arr) {
+      var model = this.getAttribute('model') || 'tags'
+      if (global.nova && global.nova._data) global.nova._data[model] = arr
+    }
+
+    cls.prototype._render = function (arr) {
+      var self = this
+      this._list.innerHTML = ''
+      for (var i = 0; i < arr.length; i++) {
+        (function (tag, idx) {
+          var chip = document.createElement('span')
+          chip.className = 'nova-tag-chip'
+          chip.textContent = tag
+          var x = document.createElement('button')
+          x.type = 'button'
+          x.className = 'nova-tag-chip-x'
+          x.textContent = '×'
+          x.addEventListener('click', function () {
+            var a = self._readModel()
+            a.splice(idx, 1)
+            self._writeModel(a)
+          })
+          chip.appendChild(x)
+          self._list.appendChild(chip)
+        })(arr[i], i)
+      }
+    }
+
+    return cls
+  }()
+
+  if (!customElements.get('nova-tag-input')) customElements.define('nova-tag-input', NovaTagInput)
+
+  // ============== <nova-color-picker> ==============
+  // model: HEX 字符串（'#rrggbb'）。用单个滑块 + HEX 输入框实现，压缩体积
+  var NovaColorPicker = function () {
+    var cls = function () { var el = Reflect.construct(HTMLElement, [], cls); el._initialized = false; return el }
+    cls.prototype = Object.create(HTMLElement.prototype)
+    cls.prototype.constructor = cls
+
+    function hexToHsv (hex) {
+      hex = hex.replace('#', '')
+      if (hex.length === 3) hex = hex.split('').map(function (c) { return c + c }).join('')
+      var r = parseInt(hex.substr(0, 2), 16) / 255
+      var g = parseInt(hex.substr(2, 2), 16) / 255
+      var b = parseInt(hex.substr(4, 2), 16) / 255
+      var max = Math.max(r, g, b), min = Math.min(r, g, b)
+      var h = 0, s = max === 0 ? 0 : (max - min) / max, v = max
+      if (max !== min) {
+        var d = max - min
+        if (max === r) h = ((g - b) / d) % 6
+        else if (max === g) h = (b - r) / d + 2
+        else h = (r - g) / d + 4
+        h *= 60
+        if (h < 0) h += 360
+      }
+      return { h: h, s: s, v: v }
+    }
+
+    function hsvToHex (h, s, v) {
+      var c = v * s
+      var x = c * (1 - Math.abs((h / 60) % 2 - 1))
+      var m = v - c
+      var r = 0, g = 0, b = 0
+      if (h < 60) { r = c; g = x; b = 0 }
+      else if (h < 120) { r = x; g = c; b = 0 }
+      else if (h < 180) { r = 0; g = c; b = x }
+      else if (h < 240) { r = 0; g = x; b = c }
+      else if (h < 300) { r = x; g = 0; b = c }
+      else { r = c; g = 0; b = x }
+      function toHex (n) { var v = Math.round((n + m) * 255); return (v < 16 ? '0' : '') + v.toString(16) }
+      return '#' + toHex(r) + toHex(g) + toHex(b)
+    }
+
+    cls.prototype.connectedCallback = function () {
+      if (this._initialized) return
+      this._initialized = true
+      var model = this.getAttribute('model') || 'color'
+      var self = this
+      this.className = 'nova-ce nova-ce-color-picker'
+      this.innerHTML =
+        '<div class="nova-color-preview" style="background:#3b82f6"></div>' +
+        '<div class="nova-color-controls">' +
+          '<label class="nova-color-row"><span>H</span><input class="nova-color-h" type="range" min="0" max="360" step="1" value="210"></label>' +
+          '<label class="nova-color-row"><span>S</span><input class="nova-color-s" type="range" min="0" max="100" step="1" value="90"></label>' +
+          '<label class="nova-color-row"><span>V</span><input class="nova-color-v" type="range" min="0" max="100" step="1" value="73"></label>' +
+          '<input class="nova-color-hex" type="text" maxlength="7" value="#3b82f6">' +
+        '</div>'
+
+      this._preview = this.querySelector('.nova-color-preview')
+      this._hIn = this.querySelector('.nova-color-h')
+      this._sIn = this.querySelector('.nova-color-s')
+      this._vIn = this.querySelector('.nova-color-v')
+      this._hexIn = this.querySelector('.nova-color-hex')
+
+      function emit (hex) {
+        self._preview.style.background = hex
+        self._hexIn.value = hex
+        if (global.nova && global.nova._data) global.nova._data[model] = hex
+        self.dispatchEvent(new CustomEvent('change', { bubbles: true, detail: { value: hex } }))
+      }
+
+      function syncFromHsv (h, s, v) {
+        self._hIn.value = Math.round(h)
+        self._sIn.value = Math.round(s * 100)
+        self._vIn.value = Math.round(v * 100)
+        emit(hsvToHex(h, s, v))
+      }
+
+      var sliderEls = [this._hIn, this._sIn, this._vIn]
+      for (var si = 0; si < sliderEls.length; si++) {
+        sliderEls[si].addEventListener('input', function () {
+          emit(hsvToHex(+self._hIn.value, +self._sIn.value / 100, +self._vIn.value / 100))
+        })
+      }
+      this._hexIn.addEventListener('change', function () {
+        var v = self._hexIn.value.trim()
+        if (!/^#?[0-9a-fA-F]{3,6}$/.test(v)) return
+        if (v[0] !== '#') v = '#' + v
+        var hsv = hexToHsv(v)
+        syncFromHsv(hsv.h, hsv.s, hsv.v)
+      })
+
+      onNovaReady(function (data) {
+        var init = data[model]
+        if (typeof init === 'string' && /^#?[0-9a-fA-F]{3,6}$/.test(init)) {
+          if (init[0] !== '#') init = '#' + init
+          var hsv = hexToHsv(init)
+          syncFromHsv(hsv.h, hsv.s, hsv.v)
+        }
+        data.$watch && data.$watch(model, function (hex) {
+          if (typeof hex !== 'string') return
+          if (!/^#[0-9a-fA-F]{3,6}$/.test(hex)) return
+          var h = hexToHsv(hex)
+          syncFromHsv(h.h, h.s, h.v)
+        })
+      })
+    }
+
+    return cls
+  }()
+
+  if (!customElements.get('nova-color-picker')) customElements.define('nova-color-picker', NovaColorPicker)
+
+  // ============== <nova-thermostat> ==============
+  // 组合：nova-slider + 数字输入 + 模式按钮 + 状态点
+  // 属性：model (温度), mode-model (cool/heat/auto/off), min, max, step, unit
+  var NovaThermostat = function () {
+    var cls = function () { var el = Reflect.construct(HTMLElement, [], cls); el._initialized = false; return el }
+    cls.prototype = Object.create(HTMLElement.prototype)
+    cls.prototype.constructor = cls
+
+    cls.prototype.connectedCallback = function () {
+      if (this._initialized) return
+      this._initialized = true
+      var model = this.getAttribute('model') || 'temp'
+      var modeModel = this.getAttribute('mode-model') || 'mode'
+      var min = this.getAttribute('min') || '16'
+      var max = this.getAttribute('max') || '30'
+      var step = this.getAttribute('step') || '0.5'
+      var unit = this.getAttribute('unit') || '°C'
+      var self = this
+
+      this.className = 'nova-ce nova-ce-thermostat'
+      this.innerHTML =
+        '<div class="nova-thermostat-readout">' +
+          '<div class="nova-thermostat-value">0</div>' +
+          '<div class="nova-thermostat-unit">' + unit + '</div>' +
+        '</div>' +
+        '<div class="nova-thermostat-mode">' +
+          '<button type="button" data-mode="cool">❄</button>' +
+          '<button type="button" data-mode="heat">☀</button>' +
+          '<button type="button" data-mode="auto">A</button>' +
+          '<button type="button" data-mode="off">⏻</button>' +
+        '</div>' +
+        '<nova-slider class="nova-thermostat-slider" min="' + min + '" max="' + max + '" step="' + step + '"></nova-slider>' +
+        '<div class="nova-thermostat-status">' +
+          '<span class="nova-thermostat-dot"></span>' +
+          '<span class="nova-thermostat-mode-label">off</span>' +
+        '</div>'
+
+      this._value = this.querySelector('.nova-thermostat-value')
+      this._modeLabel = this.querySelector('.nova-thermostat-mode-label')
+      this._dot = this.querySelector('.nova-thermostat-dot')
+      var slider = this.querySelector('nova-slider')
+      slider.setAttribute('model', model)
+
+      this._modeButtons = this.querySelectorAll('.nova-thermostat-mode button')
+      for (var i = 0; i < this._modeButtons.length; i++) {
+        this._modeButtons[i].addEventListener('click', function (e) {
+          var m = e.currentTarget.getAttribute('data-mode')
+          if (global.nova && global.nova._data) global.nova._data[modeModel] = m
+        })
+      }
+
+      onNovaReady(function (data) {
+        if (data[modeModel] == null) data[modeModel] = 'off'
+        self._renderValue(data[model], min, max, unit, data[modeModel])
+        data.$watch && data.$watch(model, function (v) {
+          self._renderValue(v, min, max, unit, data[modeModel])
+        })
+        data.$watch && data.$watch(modeModel, function (m) {
+          self._renderValue(data[model], min, max, unit, m)
+        })
+      })
+    }
+
+    cls.prototype._renderValue = function (v, min, max, unit, mode) {
+      var n = Number(v)
+      this._value.textContent = isNaN(n) ? '—' : n
+      this._modeLabel.textContent = mode
+      var colorMap = { cool: '#3b82f6', heat: '#ef4444', auto: '#10b981', off: '#6b7280' }
+      this._dot.style.background = colorMap[mode] || '#6b7280'
+      for (var i = 0; i < this._modeButtons.length; i++) {
+        var b = this._modeButtons[i]
+        b.classList.toggle('nova-thermostat-mode-active', b.getAttribute('data-mode') === mode)
+      }
+    }
+
+    return cls
+  }()
+
+  if (!customElements.get('nova-thermostat')) customElements.define('nova-thermostat', NovaThermostat)
+
   global.NovaUIElements = {
-    version: '0.1.0',
-    registered: ['nova-switch', 'nova-slider', 'nova-input-mask', 'nova-knob', 'nova-modal']
+    version: '0.2.0',
+    registered: ['nova-switch', 'nova-slider', 'nova-input-mask', 'nova-knob', 'nova-modal', 'nova-tabs', 'nova-tag-input', 'nova-color-picker', 'nova-thermostat']
   }
 })(typeof window !== 'undefined' ? window : globalThis)

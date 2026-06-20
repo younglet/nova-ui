@@ -347,3 +347,176 @@ describe('nova-modal custom element', function () {
     eq(footerButton.getAttribute('slot'), 'footer')
   })
 })
+
+// ============== <nova-tabs> ==============
+describe('nova-tabs custom element', function () {
+  it('activates first tab by default', function () {
+    const ctx = setupCe(
+      '<nova-tabs model="active">' +
+        '<button slot="tab" data-tab="a">A</button>' +
+        '<button slot="tab" data-tab="b">B</button>' +
+        '<div slot="panel" data-tab="a">A</div>' +
+        '<div slot="panel" data-tab="b">B</div>' +
+      '</nova-tabs>'
+    )
+    ctx.nova({ data: { active: 'a' } })
+    return ctx.tick().then(function () {
+      const a = ctx.document.querySelector('[data-tab="a"][slot="tab"]')
+      const b = ctx.document.querySelector('[data-tab="b"][slot="tab"]')
+      ok(a.classList.contains('nova-tab-active'))
+      ok(!b.classList.contains('nova-tab-active'))
+    })
+  })
+
+  it('clicking a tab changes model', function () {
+    const ctx = setupCe(
+      '<nova-tabs model="active">' +
+        '<button slot="tab" data-tab="a">A</button>' +
+        '<button slot="tab" data-tab="b">B</button>' +
+        '<div slot="panel" data-tab="a">A</div>' +
+        '<div slot="panel" data-tab="b">B</div>' +
+      '</nova-tabs>'
+    )
+    const data = ctx.nova({ data: { active: 'a' } })
+    return ctx.tick().then(function () {
+      const b = ctx.document.querySelector('[data-tab="b"][slot="tab"]')
+      b.click()
+      return ctx.tick()
+    }).then(function () {
+      eq(data.active, 'b')
+    })
+  })
+
+  it('arrow key navigation moves active tab', function () {
+    const ctx = setupCe(
+      '<nova-tabs model="active">' +
+        '<button slot="tab" data-tab="a">A</button>' +
+        '<button slot="tab" data-tab="b">B</button>' +
+        '<button slot="tab" data-tab="c">C</button>' +
+        '<div slot="panel" data-tab="a">A</div>' +
+        '<div slot="panel" data-tab="b">B</div>' +
+        '<div slot="panel" data-tab="c">C</div>' +
+      '</nova-tabs>'
+    )
+    const data = ctx.nova({ data: { active: 'a' } })
+    return ctx.tick().then(function () {
+      const el = ctx.document.querySelector('nova-tabs')
+      const ev = new ctx.window.KeyboardEvent('keydown', { key: 'ArrowRight', bubbles: true })
+      el.dispatchEvent(ev)
+      return ctx.tick()
+    }).then(function () {
+      eq(data.active, 'b')
+    })
+  })
+})
+
+// ============== <nova-tag-input> ==============
+describe('nova-tag-input custom element', function () {
+  it('Enter appends a tag', function () {
+    const ctx = setupCe('<nova-tag-input model="tags"></nova-tag-input>')
+    const data = ctx.nova({ data: { tags: [] } })
+    return ctx.tick().then(function () {
+      const input = ctx.document.querySelector('nova-tag-input input')
+      input.value = '客厅'
+      input.dispatchEvent(new ctx.window.KeyboardEvent('keydown', { key: 'Enter', bubbles: true }))
+      return ctx.tick()
+    }).then(function () {
+      eq(data.tags.length, 1)
+      eq(data.tags[0], '客厅')
+    })
+  })
+
+  it('Backspace at empty input removes last tag', function () {
+    const ctx = setupCe('<nova-tag-input model="tags"></nova-tag-input>')
+    const data = ctx.nova({ data: { tags: ['a', 'b'] } })
+    return new Promise(function (r) { setTimeout(r, 50) }).then(function () {
+      const input = ctx.document.querySelector('nova-tag-input input')
+      input.value = ''
+      input.dispatchEvent(new ctx.window.KeyboardEvent('keydown', { key: 'Backspace', bubbles: true }))
+      return ctx.tick()
+    }).then(function () {
+      eq(data.tags.length, 1)
+      eq(data.tags[0], 'a')
+    })
+  })
+
+  it('chip × button removes a specific tag', function () {
+    const ctx = setupCe('<nova-tag-input model="tags"></nova-tag-input>')
+    const data = ctx.nova({ data: { tags: ['a', 'b', 'c'] } })
+    return new Promise(function (r) { setTimeout(r, 50) }).then(function () {
+      const chips = ctx.document.querySelectorAll('nova-tag-input .nova-tag-chip-x')
+      chips[1].click() // remove 'b'
+      return ctx.tick()
+    }).then(function () {
+      eq(data.tags.length, 2)
+      eq(data.tags[0], 'a')
+      eq(data.tags[1], 'c')
+    })
+  })
+})
+
+// ============== <nova-color-picker> ==============
+describe('nova-color-picker custom element', function () {
+  it('initial color from model is reflected in inputs and preview', function () {
+    const ctx = setupCe('<nova-color-picker model="c"></nova-color-picker>')
+    ctx.nova({ data: { c: '#ff8800' } })
+    return new Promise(function (r) { setTimeout(r, 50) }).then(function () {
+      const el = ctx.document.querySelector('nova-color-picker')
+      eq(el.querySelector('.nova-color-hex').value, '#ff8800')
+      ok(el.querySelector('.nova-color-preview').style.background.length > 0)
+    })
+  })
+
+  it('hue slider change writes hex to model', function () {
+    const ctx = setupCe('<nova-color-picker model="c"></nova-color-picker>')
+    const data = ctx.nova({ data: { c: '#ff0000' } })
+    return new Promise(function (r) { setTimeout(r, 50) }).then(function () {
+      const h = ctx.document.querySelector('nova-color-picker .nova-color-h')
+      h.value = '120'
+      h.dispatchEvent(new ctx.window.Event('input'))
+      return ctx.tick()
+    }).then(function () {
+      // hue 120, s=1, v=1 → lime
+      eq(data.c, '#00ff00')
+    })
+  })
+})
+
+// ============== <nova-thermostat> ==============
+describe('nova-thermostat custom element', function () {
+  it('renders slider and mode buttons', function () {
+    const ctx = setupCe('<nova-thermostat model="t" mode-model="m" min="16" max="30"></nova-thermostat>')
+    ctx.nova({ data: { t: 22, m: 'off' } })
+    return new Promise(function (r) { setTimeout(r, 50) }).then(function () {
+      const el = ctx.document.querySelector('nova-thermostat')
+      ok(el.querySelector('nova-slider'))
+      ok(el.querySelector('.nova-thermostat-value'))
+      eq(el.querySelectorAll('.nova-thermostat-mode button').length, 4)
+    })
+  })
+
+  it('mode button click sets mode-model', function () {
+    const ctx = setupCe('<nova-thermostat model="t" mode-model="m"></nova-thermostat>')
+    const data = ctx.nova({ data: { t: 22, m: 'off' } })
+    return new Promise(function (r) { setTimeout(r, 50) }).then(function () {
+      const coolBtn = ctx.document.querySelector('.nova-thermostat-mode button[data-mode="cool"]')
+      coolBtn.click()
+      return ctx.tick()
+    }).then(function () {
+      eq(data.m, 'cool')
+    })
+  })
+
+  it('mode change updates dot color', function () {
+    const ctx = setupCe('<nova-thermostat model="t" mode-model="m"></nova-thermostat>')
+    const data = ctx.nova({ data: { t: 22, m: 'off' } })
+    return new Promise(function (r) { setTimeout(r, 50) }).then(function () {
+      data.m = 'heat'
+      return ctx.tick()
+    }).then(function () {
+      const dot = ctx.document.querySelector('.nova-thermostat-dot')
+      // heat mode → red
+      ok(dot.style.background.indexOf('239') >= 0 || dot.style.background.indexOf('rgb(239') >= 0 || dot.style.background === 'rgb(239, 68, 68)')
+    })
+  })
+})
