@@ -72,5 +72,5 @@ python3 -m http.server 8000 --directory src
 
 ## 配合 nova-chart
 
-- + [nova-chart](http://nova-chart.local)：在同一个 HTML 里 `<canvas id="chart">` + 加载 nova-chart.min.js
+- + [nova-chart](http://nova-chart.test)：在同一个 HTML 里 `<canvas id="chart">` + 加载 nova-chart.min.js
 - 文件名加前缀（`.novaui.` / `.novachart.`）避免冲突
