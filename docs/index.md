@@ -4,7 +4,7 @@ layout: home
 hero:
   name: "Nova UI"
   text: "IoT 设备组件库"
-  tagline: "20 个静态 CSS 组件 + 5 个 <nova-*> 自定义元素 · 给 ESP32 + MicroPython server 用"
+  tagline: "20 个静态 CSS 组件 + 5 个 <nova-*> 自定义元素 · 给 ESP32 + nova-server 用"
   actions:
     - theme: brand
       text: 🚀 快速开始

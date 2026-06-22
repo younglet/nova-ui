@@ -1,6 +1,6 @@
 /*!
  * nova-ui-elements — Custom Elements for novajs
- * License: MIT
+ * 专为 NovaMP 2.0 设计 · powered by stemstar
  */
 (function (global) {
   'use strict'

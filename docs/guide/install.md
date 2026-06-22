@@ -91,29 +91,22 @@ your-project/
 
 ## 部署到 MicroPython
 
-MicroPython 没有文件系统写权限（通常），所以：
-
-```python
-# main.py - MicroPython WebServer
-import os
-def send_static(conn, path):
-    # 从嵌入式 flash 读文件
-    try:
-        with open('/www/' + path, 'rb') as f:
-            conn.send(f.read())
-    except OSError:
-        conn.send(b'404')
-```
-
-把 HTML / CSS / JS 文件**预先烧到 flash**：
+从 ESP32 flash 提供 HTTP 服务，配套 [**nova-server**](../../../nova-server/)（10KB 的 MicroPython 异步 Web 框架）：
 
 ```bash
-# 把 src/ 整个目录拷到 ESP32 flash 的 /www/
-mpremote fs cp -r nova-ui/src :www/src
-mpremote fs cp -r my-index.html :www/index.html
+# 1. 拷贝前端文件到 ESP32 flash
+mpremote cp -r src :/www/static/
+
+# 2. 拷贝 nova-server 到 ESP32
+mpremote cp -r ../nova-server/nova_server :
+
+# 3. 启动（会自动在 80 端口提供 HTTP 服务）
+mpremote exec "from nova_server import NovaServer; app = NovaServer()"
 ```
 
-启动 server 后，手机连 ESP32 的 WiFi AP，浏览器访问 `http://192.168.4.1/` 就能看到界面。
+手机连 ESP32 的 WiFi AP，浏览器访问 `http://192.168.4.1/` 就能看到界面。
+
+> 💡 详见 [nova-server 文档](../../../nova-server/) 的 `main.py` 模板，包含 WiFi 连接 + 静态文件服务 + API 路由的完整骨架。
 
 ## 下一步
 
