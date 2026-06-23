@@ -1,6 +1,10 @@
 import { defineConfig } from 'vitepress'
 
+// GitHub Pages project site uses /<repo>/ subpath; keep '/' for local dev.
+const base = process.env.GITHUB_ACTIONS ? '/nova-ui/' : '/'
+
 export default defineConfig({
+  base,
   title: 'Nova UI',
   description: 'IoT 设备组件库（CSS 静态组件 + <nova-*> 自定义元素）。配套 novajs + nova-style，给 ESP32 + MicroPython server 用。',
   lang: 'zh-CN',
