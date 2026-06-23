@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>nova-ui 自定义元素 demo</title>
+<link rel="stylesheet" href="../../src/nova-style.css">
+<link rel="stylesheet" href="../../src/nova-ui.css">
+<style>
+  body { margin: 0; padding: 16px; font: 14px/1.5 -apple-system, sans-serif; background: #f9fafb; }
+  .demo-card { background: #fff; border-radius: 8px; padding: 16px; box-shadow: 0 1px 3px #0001; max-width: 720px; margin: 0 auto 12px; }
+  .row { display: flex; align-items: center; gap: 12px; padding: 8px 0; flex-wrap: wrap; }
+  h3 { margin: 0 0 8px; font-size: 14px; color: #6b7280; }
+</style>
+</head>
+<body>
+
+<div class="demo-card">
+  <h3>① nova-switch（双向绑 + 响应式）</h3>
+  <div class="row">
+    <nova-switch model="power"></nova-switch>
+    <span :class="['badge', power ? 'badge-success' : 'badge-neutral']">
+      {{ power ? '已开启' : '已关闭' }}
+    </span>
+  </div>
+</div>
+
+<div class="demo-card">
+  <h3>② nova-slider（双向绑 + 防抖）</h3>
+  <div class="row">
+    <nova-slider model="brightness" min="0" max="100" debounce="400"
+                 @debounced-change="report()"
+                 style="flex:1; min-width:160px"></nova-slider>
+    <span class="badge badge-info">{{ brightness }}%</span>
+  </div>
+  <div style="font-size:12px;color:#6b7280;margin-top:4px">
+    拖动期间不打日志，停下 400ms 才回调 report()
+  </div>
+</div>
+
+<div class="demo-card">
+  <h3>③ nova-knob（IoT 旋钮）</h3>
+  <div class="row">
+    <nova-knob model="brightness" size="100"></nova-knob>
+    <nova-knob model="brightness" size="80" value-color="#3b82f6" decimals="1"></nova-knob>
+    <nova-knob model="brightness" size="60" value-color="#ef4444"></nova-knob>
+  </div>
+</div>
+
+<div class="demo-card">
+  <h3>④ nova-input-mask（输入掩码）</h3>
+  <div class="row">
+    <nova-input-mask model="phone" mask="999-9999-9999" placeholder="138-0000-0000"></nova-input-mask>
+    <nova-input-mask model="ipv4" mask="999.999.999.999" placeholder="192.168.1.1"></nova-input-mask>
+  </div>
+</div>
+
+<div class="demo-card">
+  <h3>⑤ nova-modal（带 slot）</h3>
+  <div class="row">
+    <button class="btn btn-primary" @click="openModal()">打开弹窗</button>
+    <span :class="['badge', modalOpen ? 'badge-warning' : 'badge-neutral']">
+      {{ modalOpen ? '打开中' : '已关闭' }}
+    </span>
+  </div>
+
+  <nova-modal show="modalOpen" title="编辑设备">
+    <p>设备名称：</p>
+    <input model="deviceName" placeholder="输入名字"
+           style="width:100%;padding:6px;border:1px solid #d1d5db;border-radius:4px">
+    <p style="margin-top:12px;color:#6b7280;font-size:12px">
+      亮度：{{ brightness }}% · 电源：{{ power ? '开' : '关' }}
+    </p>
+
+    <button slot="footer" class="btn btn-ghost btn-sm" @click="closeModal()">取消</button>
+    <button slot="footer" class="btn btn-primary btn-sm" @click="save()">保存</button>
+  </nova-modal>
+</div>
+
+<script src="../../src/novajs.js"></script>
+<script src="../../src/nova-ui-elements.js"></script>
+<script>
+  nova({
+    data: {
+      power: false,
+      brightness: 50,
+      phone: '',
+      ipv4: '',
+      modalOpen: false,
+      deviceName: ''
+    },
+    funcs: {
+      report () {
+        console.log('亮度上报：' + this.brightness + '%')
+      },
+      openModal () { this.modalOpen = true },
+      closeModal () { this.modalOpen = false },
+      save () {
+        var name = this.deviceName || '空'
+        console.log('已保存：' + name)
+        this.modalOpen = false
+      }
+    }
+  })
+</script>
+
+</body>
+</html>

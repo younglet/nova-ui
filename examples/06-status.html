@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>Nova UI - 状态点、进度条、数据展示</title>
+  <link rel="stylesheet" href="../nova-style.css">
+  <link rel="stylesheet" href="../nova-ui.css">
+</head>
+<body class="bg-gray-50 p-4">
+
+  <h1 class="text-2xl font-bold mb-1">状态点 / 进度条 / 数据展示</h1>
+  <p class="text-sm text-gray-500 mb-6">IoT 场景最常用的"状态表达"组件</p>
+
+  <!-- Status Dot 状态点 -->
+  <section class="card mb-6">
+    <div class="card-body">
+      <h2 class="card-title">Status Dot 状态点</h2>
+      <p class="text-sm text-gray-500 mb-3">设备状态指示灯，IoT 页面出现频率最高的元素。</p>
+
+      <div class="flex flex-col gap-2">
+        <div class="flex items-center gap-2">
+          <span class="status-dot status-sm status-online"></span>
+          <span class="text-sm">在线（小）</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="status-dot status-online"></span>
+          <span class="text-sm">在线（默认）</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="status-dot status-lg status-online status-pulse"></span>
+          <span class="text-sm">在线（大 + 脉冲动画）</span>
+        </div>
+        <div class="flex items-center gap-2 mt-2">
+          <span class="status-dot status-online"></span>
+          <span class="text-sm text-gray-700">在线</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="status-dot status-offline"></span>
+          <span class="text-sm text-gray-700">离线</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="status-dot status-error"></span>
+          <span class="text-sm text-gray-700">故障</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="status-dot status-warning"></span>
+          <span class="text-sm text-gray-700">警告</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sensor Card 传感器卡片 -->
+  <section class="mb-6">
+    <h2 class="text-lg font-bold mb-3">Sensor Card 传感器卡片</h2>
+    <div class="grid grid-cols-3 gap-3">
+      <div class="sensor-card">
+        <div class="sensor-label">空气温度</div>
+        <div class="sensor-value">24.5<span class="sensor-unit">°C</span></div>
+        <div class="sensor-status sensor-status-normal">↑ 正常</div>
+      </div>
+      <div class="sensor-card">
+        <div class="sensor-label">空气湿度</div>
+        <div class="sensor-value" style="color: var(--blue-500)">65<span class="sensor-unit">%</span></div>
+        <div class="sensor-status sensor-status-normal">↑ 正常</div>
+      </div>
+      <div class="sensor-card">
+        <div class="sensor-label">PM2.5</div>
+        <div class="sensor-value" style="color: var(--green-500)">35</div>
+        <div class="sensor-status sensor-status-normal">↑ 优</div>
+      </div>
+
+      <div class="sensor-card">
+        <div class="sensor-label">土壤湿度</div>
+        <div class="sensor-value" style="color: var(--yellow-500)">28<span class="sensor-unit">%</span></div>
+        <div class="sensor-status sensor-status-warning">⚠ 偏低</div>
+      </div>
+      <div class="sensor-card">
+        <div class="sensor-label">光照</div>
+        <div class="sensor-value">420<span class="sensor-unit">lx</span></div>
+        <div class="sensor-status sensor-status-normal">↑ 正常</div>
+      </div>
+      <div class="sensor-card">
+        <div class="sensor-label">温度</div>
+        <div class="sensor-value" style="color: var(--red-500)">32.1<span class="sensor-unit">°C</span></div>
+        <div class="sensor-status sensor-status-error">✕ 超阈值</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Device Card 设备控制卡片 -->
+  <section class="mb-6">
+    <h2 class="text-lg font-bold mb-3">Device Card 设备控制卡片</h2>
+    <div class="grid grid-cols-3 gap-3">
+      <div class="device-card">
+        <div class="device-card-header">
+          <div class="device-card-title">💡 客厅灯</div>
+          <span class="device-card-status device-card-status-on"></span>
+        </div>
+        <div class="text-xs text-gray-500 mb-3">运行中</div>
+        <div class="device-card-actions">
+          <button class="btn btn-success btn-sm btn-block">开</button>
+          <button class="btn btn-neutral btn-sm btn-block">关</button>
+        </div>
+      </div>
+
+      <div class="device-card">
+        <div class="device-card-header">
+          <div class="device-card-title">❄️ 空调</div>
+          <span class="device-card-status device-card-status-off"></span>
+        </div>
+        <div class="text-xs text-gray-500 mb-3">已关闭</div>
+        <div class="device-card-actions">
+          <button class="btn btn-success btn-sm btn-block">开</button>
+          <button class="btn btn-neutral btn-sm btn-block">关</button>
+        </div>
+      </div>
+
+      <div class="device-card">
+        <div class="device-card-header">
+          <div class="device-card-title">🔥 加热器</div>
+          <span class="device-card-status device-card-status-warn"></span>
+        </div>
+        <div class="text-xs text-gray-500 mb-3">温度异常</div>
+        <div class="device-card-actions">
+          <button class="btn btn-success btn-sm btn-block">开</button>
+          <button class="btn btn-neutral btn-sm btn-block">关</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stat 数据展示 -->
+  <section class="mb-6">
+    <h2 class="text-lg font-bold mb-3">Stat 数据展示</h2>
+    <div class="grid grid-cols-4 gap-3">
+      <div class="card">
+        <div class="stat">
+          <div class="stat-title">本月用电</div>
+          <div class="stat-value">128<span class="stat-unit">度</span></div>
+          <div class="stat-desc">↑ 比上月 +12%</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="stat stat-success">
+          <div class="stat-title">正常运行</div>
+          <div class="stat-value">98.5<span class="stat-unit">%</span></div>
+          <div class="stat-desc">↑ 良好</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="stat stat-warning">
+          <div class="stat-title">告警次数</div>
+          <div class="stat-value">3</div>
+          <div class="stat-desc">⚠ 待处理</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="stat stat-error">
+          <div class="stat-title">故障设备</div>
+          <div class="stat-value">1</div>
+          <div class="stat-desc">✕ 需关注</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Progress 进度条 -->
+  <section class="card mb-6">
+    <div class="card-body">
+      <h2 class="card-title">Progress 进度条</h2>
+
+      <h3 class="text-sm font-bold text-gray-500 mt-3 mb-2">颜色</h3>
+      <div class="progress progress-primary mb-2"><div class="progress-bar" style="width: 60%"></div></div>
+      <div class="progress progress-success mb-2"><div class="progress-bar" style="width: 80%"></div></div>
+      <div class="progress progress-warning mb-2"><div class="progress-bar" style="width: 45%"></div></div>
+      <div class="progress progress-error mb-4"><div class="progress-bar" style="width: 90%"></div></div>
+
+      <h3 class="text-sm font-bold text-gray-500 mb-2">尺寸</h3>
+      <div class="progress progress-sm mb-2"><div class="progress-bar" style="width: 50%; background-color: var(--blue-500)"></div></div>
+      <div class="progress mb-2"><div class="progress-bar" style="width: 50%; background-color: var(--blue-500)"></div></div>
+      <div class="progress progress-lg"><div class="progress-bar" style="width: 50%; background-color: var(--blue-500)"></div></div>
+    </div>
+  </section>
+
+</body>
+</html>
