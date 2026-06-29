@@ -60,14 +60,15 @@ nova-ui/
 │           └── components/
 │               └── Esp32Flasher.vue ← Web Serial 一键烧录按钮（内联 esp32-serial.js）
 ├── test/05-elements.test.js        ← 37 个自定义元素测试
-└── examples/                       ← 14 个 HTML demo
+└── usage/                          ← 14 个 HTML demo + index.novaui.html 部署模板
     ├── 01-buttons.html ~ 08-complete-app.html  静态 demo
     ├── 09-js-api.html                          动态组件 demo
     ├── 10-custom-elements.html                 同上备用
     ├── 11-tabs.html                            动态 demo
     ├── 12-tag-input.html
     ├── 13-color-picker.html
-    └── 14-thermostat.html
+    ├── 14-thermostat.html
+    └── index.novaui.html                       ESP32 部署模板
 ```
 
 ## 核心约定

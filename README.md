@@ -169,8 +169,9 @@ nova-ui/
 ├── docs/                 ← VitePress 文档站（docs/components/ + docs/guide/）
 │   └── public/            ← iframe demo 用的静态资源（与 src/ 同步）
 │
-├── examples/             ← 可直接复制粘贴的 HTML 案例
-│   └── 01-buttons.html ~ 10-custom-elements.html
+├── usage/               ← 可直接复制粘贴的 HTML 案例（14 个 + index.novaui.html 部署模板）
+│   ├── 01-buttons.html ~ 14-thermostat.html
+│   └── index.novaui.html
 │
 └── test/                 ← 22 个 jsdom 测试
     │   ├── config.ts            ← 站点配置（导航/侧边栏）
@@ -201,14 +202,14 @@ nova-ui/
 
 | 步骤 | 看什么 | 学到什么 |
 |:---:|---|---|
-| 1 | `examples/01-buttons.html` | 按钮所有变体 |
-| 2 | `examples/02-cards.html` | 卡片、徽章、提示框 |
-| 3 | `examples/03-forms.html` | 输入框、开关、加载 |
-| 4 | `examples/04-modals.html` | 弹窗、通知 |
-| 5 | `examples/05-navigation.html` | 导航栏、侧边栏、标签页 |
-| 6 | `examples/06-status.html` | 状态点、进度条、面包屑 |
-| 7 | `examples/07-dashboard.html` | 综合 IoT 仪表盘 |
-| 8 | `examples/08-complete-app.html` | 完整智能家居控制台 |
+| 1 | `usage/01-buttons.html` | 按钮所有变体 |
+| 2 | `usage/02-cards.html` | 卡片、徽章、提示框 |
+| 3 | `usage/03-forms.html` | 输入框、开关、加载 |
+| 4 | `usage/04-modals.html` | 弹窗、通知 |
+| 5 | `usage/05-navigation.html` | 导航栏、侧边栏、标签页 |
+| 6 | `usage/06-status.html` | 状态点、进度条、面包屑 |
+| 7 | `usage/07-dashboard.html` | 综合 IoT 仪表盘 |
+| 8 | `usage/08-complete-app.html` | 完整智能家居控制台 |
 
 ## 🧩 自定义
 
