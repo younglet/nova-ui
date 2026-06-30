@@ -4,7 +4,7 @@ title: 自定义元素
 
 # 自定义元素（`<nova-*>`）
 
-> 用 `<nova-switch>` 这种 HTML 标签，自动响应式。底层由 [novajs](https://github.com/) 驱动。
+> 用 `<nova-switch>` 这种 HTML 标签，自动响应式。底层由 [novajs](https://github.com/younglet/novajs) 驱动。
 
 ## 引入
 
@@ -196,6 +196,6 @@ SVG 旋钮，**拖动 / 滚轮**改变值。
 
 ## 下一步
 
-- [示例 demo](https://github.com/) — 5 个元素组合（仓库 examples/ 目录）
+- [示例 demo](https://github.com/younglet/nova-ui/tree/main/template/html/07-dashboard.html) — 5 个元素组合
 - [组件列表](/components/) — 静态 CSS 组件
-- [novajs 文档](https://github.com/) — 反应式内核参考
+- [novajs 文档](https://github.com/younglet/novajs) — 反应式内核参考

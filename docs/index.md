@@ -79,7 +79,7 @@ features:
 
 ## 动态组件（自定义元素）
 
-引入 [`novajs.js`](https://github.com/) + `nova-ui-elements.js`，用 `<nova-switch model="power">` 这种 HTML 标签——**自动响应式、自动防抖、自动事件**。
+引入 [`novajs.js`](https://github.com/younglet/novajs) + `nova-ui-elements.js`，用 `<nova-switch model="power">` 这种 HTML 标签——**自动响应式、自动防抖、自动事件**。
 
 ```html
 <link rel="stylesheet" href="nova-style.css">

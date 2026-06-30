@@ -2,17 +2,17 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
-  <title>Nova UI · 自定义元素（PrimeVue 风格）</title>
-  <link rel="stylesheet" href="../src/nova-style.min.css">
-  <link rel="stylesheet" href="../src/nova-ui.min.css">
+  <title>Nova UI · 自定义元素 demo</title>
+  <link rel="stylesheet" href="../../src/nova-style.min.css">
+  <link rel="stylesheet" href="../../src/nova-ui.min.css">
 </head>
 <body class="bg-gray-50 min-h-screen p-4">
 
   <div class="max-w-3xl mx-auto">
     <h1 class="text-2xl font-bold mb-1">Nova UI · 自定义元素</h1>
-    <p class="text-sm text-gray-500 mb-6">用 `<nova-*>` HTML 标签，PrimeVue / Element 风格，自动响应式</p>
+    <p class="text-sm text-gray-500 mb-6">用 <code>&lt;nova-switch model="power"&gt;</code> 这种 HTML 标签，PrimeVue / Element 风格</p>
 
-    <!-- ① switch + slider -->
+    <!-- ① switch + slider + knob -->
     <div class="card mb-4">
       <div class="card-body">
         <h2 class="card-title">① nova-switch · nova-slider · nova-knob</h2>
@@ -46,7 +46,7 @@
     <div class="card mb-4">
       <div class="card-body">
         <h2 class="card-title">② nova-input-mask</h2>
-        <p class="text-sm text-gray-500 mb-3">输入掩码：手机号 / 身份证 / IP 等</p>
+        <p class="text-sm text-gray-500 mb-3">输入掩码：手机号 / 身份证 / IP / MAC</p>
 
         <div class="grid grid-cols-2 gap-3">
           <div>
@@ -73,21 +73,21 @@
       </div>
     </div>
 
-    <!-- ③ nova-modal -->
+    <!-- ③ modal -->
     <div class="card mb-4">
       <div class="card-body">
         <h2 class="card-title">③ nova-modal</h2>
-        <p class="text-sm text-gray-500 mb-3">带 slot 的弹窗（标题 + 内容 + 底部按钮 slot）</p>
+        <p class="text-sm text-gray-500 mb-3">带 slot 的弹窗</p>
 
-        <nova-button text="打开编辑弹窗" variant="primary" id="open-modal-btn"></nova-button>
+        <button class="btn btn-primary" @click="data.modalOpen = true">打开编辑弹窗</button>
 
         <nova-modal show="modalOpen" title="编辑设备">
-          <p class="mb-2">设备名称：</p>
+          <p>设备名称：</p>
           <input model="deviceName" class="w-full border rounded px-2 py-1" placeholder="输入名字">
           <p class="mt-3 text-sm text-gray-500">亮度：{{ brightness }}%</p>
 
-          <button slot="footer" class="btn btn-ghost btn-sm" id="modal-cancel-btn">取消</button>
-          <button slot="footer" class="btn btn-primary btn-sm" id="modal-save-btn">保存</button>
+          <button slot="footer" class="btn btn-ghost btn-sm" @click="data.modalOpen = false">取消</button>
+          <button slot="footer" class="btn btn-primary btn-sm" @click="data.modalOpen = false">保存</button>
         </nova-modal>
 
         <div class="mt-3 text-sm">
@@ -100,8 +100,8 @@
 
   </div>
 
-  <script src="../src/novajs.min.js"></script>
-  <script src="../src/nova-ui-elements.min.js"></script>
+  <script src="../../src/novajs.min.js"></script>
+  <script src="../../src/nova-ui-elements.min.js"></script>
   <script>
     nova({
       data: {
@@ -114,26 +114,7 @@
         modalOpen: false,
         deviceName: ''
       },
-      funcs: {
-        openModal () { this.modalOpen = true },
-        closeModal () { this.modalOpen = false; this.deviceName = '' },
-        saveModal () {
-          novaUi.toast('已保存：' + (this.deviceName || '空'), { variant: 'success' })
-          this.modalOpen = false
-        }
-      }
-    })
-
-    document.getElementById('open-modal-btn').addEventListener('click', function () {
-      nova._data.modalOpen = true
-    })
-    document.getElementById('modal-cancel-btn').addEventListener('click', function () {
-      nova._data.modalOpen = false
-    })
-    document.getElementById('modal-save-btn').addEventListener('click', function () {
-      var name = nova._data.deviceName
-      novaUi.toast('已保存：' + (name || '空'), { variant: 'success' })
-      nova._data.modalOpen = false
+      funcs: {}
     })
   </script>
 </body>

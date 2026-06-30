@@ -2,8 +2,8 @@
 
 > IoT 组件库。20 个 CSS 静态组件 + 5 个 `<nova-*>` 自定义元素。
 > 给烧了 MicroPython 的 ESP32 当 HTTP server 时的前端三件套之一。
-> 配套 [novajs](https://github.com/) + [nova-style](https://github.com/)。
-> 后端推荐 [**nova-server**](../nova-server/)（MicroPython 异步 Web 框架）。
+> 配套 [novajs](https://github.com/younglet/novajs) + [nova-style](https://github.com/younglet/nova-style)。
+> 后端推荐 [**nova-server**](https://github.com/younglet/nova-server)（MicroPython 异步 Web 框架）。
 
 ## ✨ 特点
 
@@ -213,7 +213,7 @@ nova-ui/
 
 ## 🧩 自定义
 
-想要新组件？参考 [nova-style 的扩展指南](../nova-style/README.md#扩展)，在 `nova-ui.css` 末尾添加：
+想要新组件？参考 [nova-style 的扩展指南](https://github.com/younglet/nova-style)，在 `nova-ui.css` 末尾添加：
 
 ```css
 .my-component {

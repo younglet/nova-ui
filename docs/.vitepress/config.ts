@@ -4,6 +4,7 @@ import { defineConfig } from 'vitepress'
 const base = process.env.GITHUB_ACTIONS ? '/nova-ui/' : '/'
 
 export default defineConfig({
+  repo: 'https://github.com/younglet/nova-ui',
   base,
   title: 'Nova UI',
   description: 'IoT 设备组件库（CSS 静态组件 + <nova-*> 自定义元素）。配套 novajs + nova-style，给 ESP32 + MicroPython server 用。',
@@ -37,7 +38,8 @@ export default defineConfig({
           { text: 'Nova Style', link: 'https://younglet.github.io/nova-style/' },
           { text: 'Nova UI', link: 'https://younglet.github.io/nova-ui/' },
           { text: 'NovaChart', link: 'https://younglet.github.io/nova-chart/' },
-          { text: 'Nova Server', link: 'https://younglet.github.io/nova-server/' }
+          { text: 'Nova Server', link: 'https://younglet.github.io/nova-server/' },
+          { text: 'NovaMP 固件', link: 'https://younglet.github.io/novamp/' }
         ]
       }
     ],
@@ -117,9 +119,7 @@ export default defineConfig({
       ]
     },
 
-    socialLinks: [
-      { icon: 'github', link: 'https://github.com/' }
-    ],
+    socialLinks: [{ icon: 'github', link: 'https://github.com/younglet/nova-ui' }],
 
     footer: {
       message: '专为 NovaMP 2.0 设计 · powered by stemstar',

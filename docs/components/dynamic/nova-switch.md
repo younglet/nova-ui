@@ -67,7 +67,7 @@ container.appendChild(sw)
 
 ### 源码
 
-[`nova-ui-elements.js`](https://github.com/) 里搜 `NovaSwitch` 看实现，约 30 行。
+[`nova-ui-elements.js`](https://github.com/younglet/nova-ui) 里搜 `NovaSwitch` 看实现，约 30 行。
 
 ## 下一步
 
