@@ -1,8 +1,8 @@
 {
-  "name": "nova-ui-docs",
+  "name": "nova-ui",
   "version": "1.0.0",
-  "description": "Nova UI documentation site",
-  "private": true,
+  "description": "IoT 组件库。20 个 CSS 静态组件 + 9 个 `<nova-*>` 自定义元素。",
+  "private": false,
   "type": "module",
   "scripts": {
     "build": "csso src/nova-ui.css -o src/nova-ui.min.css && csso src/nova-style.css -o src/nova-style.min.css && terser src/nova-ui-elements.js -c -m --comments false -o src/nova-ui-elements.min.js && terser src/novajs.js -c -m --comments false -o src/novajs.min.js",
@@ -17,5 +17,22 @@
     "csso-cli": "^4.0.2",
     "terser": "^5.48.0",
     "vitepress": "^1.0.0"
+  },
+  "license": "MIT",
+  "author": "stemstar <https://github.com/younglet>",
+  "keywords": [
+    "web-components",
+    "iot",
+    "ui",
+    "dashboard",
+    "custom-elements"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/younglet/nova-ui.git"
+  },
+  "homepage": "https://younglet.github.io/nova-ui/",
+  "bugs": {
+    "url": "https://github.com/younglet/nova-ui/issues"
   }
 }

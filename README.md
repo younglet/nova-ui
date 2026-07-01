@@ -1,5 +1,7 @@
 # Nova UI
 
+[![License](https://img.shields.io/github/license/younglet/nova-ui)](https://github.com/younglet/nova-ui/blob/main/LICENSE) [![GitHub stars](https://img.shields.io/github/stars/younglet/nova-ui.svg)](https://github.com/younglet/nova-ui) [![Docs](https://img.shields.io/badge/Docs-nova-ui.app-blueviolet.svg)](https://younglet.github.io/nova-ui/) ![Size](https://img.shields.io/badge/Size-21KB_min-orange.svg)
+
 > IoT 组件库。20 个 CSS 静态组件 + 5 个 `<nova-*>` 自定义元素。
 > 给烧了 MicroPython 的 ESP32 当 HTTP server 时的前端三件套之一。
 > 配套 [novajs](https://github.com/younglet/novajs) + [nova-style](https://github.com/younglet/nova-style)。

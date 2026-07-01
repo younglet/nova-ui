@@ -7,7 +7,7 @@ export default defineConfig({
   repo: 'https://github.com/younglet/nova-ui',
   base,
   title: 'Nova UI',
-  description: 'IoT 设备组件库（CSS 静态组件 + <nova-*> 自定义元素）。配套 novajs + nova-style，给 ESP32 + MicroPython server 用。',
+  description: 'IoT 组件库。20 个 CSS 静态组件 + 9 个 <nova-*> 自定义元素 · 21KB min · 配合 novajs 用 · 给 ESP32 当 HTTP server 用。',
   lang: 'zh-CN',
   cleanUrls: true,
   lastUpdated: true,
@@ -20,7 +20,7 @@ export default defineConfig({
     ['link', { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' }],
     ['link', { rel: 'stylesheet', href: '/nova-style.css' }],
     ['link', { rel: 'stylesheet', href: '/nova-ui.css' }],
-    ['meta', { name: 'theme-color', content: '#3b82f6' }]
+    ['meta', { name: 'theme-color', content: '#10b981' }]
   ],
 
   themeConfig: {
